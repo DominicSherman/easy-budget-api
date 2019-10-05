@@ -1,0 +1,21 @@
+{
+  "name": "easy-budget-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Dominic Sherman",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server-express": "^2.9.5",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "firebase-admin": "^8.6.0",
+    "firebase-functions": "^3.2.0",
+    "firebase-tools": "7.4.0"
+  },
+  "scripts": {
+    "dev": "firebase serve --only functions"
+  },
+  "engines": {
+    "node": "10"
+  }
+}
