@@ -2,7 +2,7 @@ import {https} from 'firebase-functions';
 import express from 'express';
 import {ApolloServer} from 'apollo-server-express';
 import schema from './schema';
-import resolvers from './resolvers';
+import resolvers from './resolver-map';
 
 const createGraphQLServer = () => {
     const app = express();

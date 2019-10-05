@@ -13,6 +13,7 @@
     "firebase-tools": "7.4.0"
   },
   "scripts": {
+    "deploy": "firebase deploy --only functions",
     "dev": "firebase serve --only functions"
   },
   "engines": {
