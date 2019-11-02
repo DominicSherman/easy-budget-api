@@ -2,7 +2,7 @@ import {gql} from 'apollo-server-express';
 
 const schema = gql`
 type Query {
-    hello: String
+    variableExpenses: [VariableExpense!]
 }
 
 type Mutation {
@@ -10,6 +10,7 @@ type Mutation {
 }
 
 type VariableExpense {
+    variableExpenseId: ID
     amount: Int
     name: String
     spent: Int

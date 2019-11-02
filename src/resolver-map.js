@@ -1,8 +1,8 @@
-import createVariableExpenseResolver from './resolvers/create-variable-expense-resolver';
+import {createVariableExpenseResolver, getVariableExpensesResolver} from './resolvers/variable-expense-resolvers';
 
 export default {
     Query: {
-        hello: () => 'foo'
+        variableExpenses: getVariableExpensesResolver
     },
     Mutation: {
         createVariableExpense: createVariableExpenseResolver
