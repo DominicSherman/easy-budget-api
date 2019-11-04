@@ -13,7 +13,6 @@ type VariableExpense {
     variableExpenseId: ID
     amount: Int
     name: String
-    spent: Int
 }
 `;
 

@@ -8,7 +8,6 @@ export const createVariableExpenseResolver = async (root, args) => {
     const variableExpense = {
         amount: 400,
         name: 'Food',
-        spent: 0,
         variableExpenseId
     };
 
