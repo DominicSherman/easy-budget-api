@@ -1,10 +1,10 @@
-import {createVariableExpenseResolver, getVariableExpensesResolver} from './resolvers/variable-expense-resolvers';
+import {createVariableCategoryResolver, getVariableCategoryResolver} from './resolvers/variable-category-resolvers';
 
 export default {
     Query: {
-        variableExpenses: getVariableExpensesResolver
+        variableCategories: getVariableCategoryResolver
     },
     Mutation: {
-        createVariableExpense: createVariableExpenseResolver
+        createVariableCategory: createVariableCategoryResolver
     }
 };

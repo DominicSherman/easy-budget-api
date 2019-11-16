@@ -2,17 +2,25 @@ import {gql} from 'apollo-server-express';
 
 const schema = gql`
 type Query {
-    variableExpenses: [VariableExpense!]
+    variableCategories(userId: String!): [VariableCategory!]
 }
 
 type Mutation {
-    createVariableExpense: VariableExpense
+    createVariableCategory(variableCategory: CreateVariableCategory!): VariableCategory
 }
 
-type VariableExpense {
-    variableExpenseId: ID
-    amount: Int
-    name: String
+type VariableCategory {
+    variableCategoryId: ID!
+    userId: String!
+    amount: Int!
+    name: String!
+}
+
+input CreateVariableCategory {
+    variableCategoryId: String!
+    userId: String!
+    amount: Int!
+    name: String!
 }
 `;
 

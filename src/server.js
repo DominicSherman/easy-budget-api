@@ -14,7 +14,11 @@ const createGraphQLServer = () => {
         playground: true
     });
 
-    apolloServer.applyMiddleware({app, path: '/', cors: true});
+    apolloServer.applyMiddleware({
+        app,
+        path: '/',
+        cors: true
+    });
 
     return app;
 };
