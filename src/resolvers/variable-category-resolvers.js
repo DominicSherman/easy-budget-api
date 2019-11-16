@@ -1,9 +1,9 @@
 import {getVariableCategories, insertVariableCategory} from '../repositories/variable-category-repository';
 
 export const createVariableCategoryResolver = async (root, args) => {
-    const {userId, variableCategory} = args;
+    const {variableCategory} = args;
 
-    await insertVariableCategory(userId, variableCategory);
+    await insertVariableCategory(variableCategory.userId, variableCategory);
 
     return variableCategory;
 };
