@@ -1,6 +1,6 @@
 # easy-budget-api
 
-GraphQL server deployed using Express and Firebase Functions
+GraphQL server deployed using Express and [Firebase](https://console.firebase.google.com/u/0/project/easy-budget-2f9aa/overview) Functions
 
 ## Running
 
