@@ -1,7 +1,9 @@
 import admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
 
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp({
+    credential: admin.credential.cert(require('../../service-account')),
+    databaseURL: 'https://easy-budget-2f9aa.firebaseio.com'
+});
 const db = admin.firestore();
 
 export const setFirestoreData = (col, doc, col2, doc2, data) =>

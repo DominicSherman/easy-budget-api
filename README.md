@@ -2,8 +2,9 @@
 
 GraphQL server deployed using Express and Firebase Functions
 
-## Installation
+## Running
 
-1. Install the [firebase CLI](https://firebase.google.com/docs/cli)
-2. Login into firebase using `firebase login`
-3. NO CLUE
+ * You will need the `service-account.json` file in your root directory for authentication
+ * `yarn` to install the `node_modules`
+ * `yarn dev` to start the server
+ * Go to `http://localhost:5000/easy-budget-2f9aa/us-central1/api` for GraphQL playground
