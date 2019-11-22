@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "lib": ["es6"],
+    "lib": ["es2017"],
+    "allowJs": false,
+    "checkJs": false,
     "module": "commonjs",
     "noImplicitReturns": true,
     "outDir": "lib",
