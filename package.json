@@ -12,13 +12,20 @@
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.2.0",
     "firebase-tools": "7.4.0",
+    "graphql": "^14.5.8",
     "moment": "^2.24.0"
   },
   "scripts": {
     "deploy": "firebase deploy --only functions",
-    "dev": "firebase serve --only functions"
+    "dev": "firebase serve --only functions",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "engines": {
     "node": "10"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.8.3",
+    "@graphql-codegen/typescript": "1.8.3",
+    "@graphql-codegen/introspection": "1.8.3"
   }
 }
