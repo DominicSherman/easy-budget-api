@@ -1,5 +1,5 @@
-import admin from 'firebase-admin';
-import config from 'config';
+import admin = require('firebase-admin');
+const config = require('config');
 
 admin.initializeApp({
     credential: admin.credential.cert(require('../../service-account')),

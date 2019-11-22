@@ -25,7 +25,7 @@ export type CreateVariableCategory = {
 
 export type Mutation = {
    __typename?: 'Mutation',
-  createVariableCategory?: Maybe<VariableCategory>,
+  createVariableCategory: VariableCategory,
 };
 
 
@@ -35,7 +35,7 @@ export type MutationCreateVariableCategoryArgs = {
 
 export type Query = {
    __typename?: 'Query',
-  variableCategories?: Maybe<Array<VariableCategory>>,
+  variableCategories: Array<VariableCategory>,
 };
 
 

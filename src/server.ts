@@ -1,5 +1,5 @@
 import {https} from 'firebase-functions';
-import express from 'express';
+import express = require('express');
 import {ApolloServer} from 'apollo-server-express';
 import schema from './schema';
 import resolvers from './resolver-map';
