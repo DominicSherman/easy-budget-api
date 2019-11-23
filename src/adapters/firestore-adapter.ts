@@ -7,14 +7,14 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
-export const setFirestoreData = (doc, col2, doc2, data) =>
+export const setFirestoreData = (doc, col2, doc2, data): Promise<FirebaseFirestore.WriteResult> =>
     db.collection(config.get('rootPath'))
         .doc(doc)
         .collection(col2)
         .doc(doc2)
         .set(data);
 
-export const getFirestoreData = (userId, collectionName) =>
+export const getFirestoreData = (userId, collectionName): Promise<FirebaseFirestore.QuerySnapshot> =>
     db.collection(config.get('rootPath'))
         .doc(userId)
         .collection(collectionName)

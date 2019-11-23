@@ -21,6 +21,7 @@ module.exports = {
     'max-params': ['error', 4],
     'new-cap': [2, { "capIsNewExceptions": ['Touchable', 'Ripple'] }],
     'node/no-unpublished-import': 0,
+    'node/no-unpublished-require': 0,
     'no-shadow': 0,
     'sort-keys': ['error', 'asc',
       { caseSensitive: false, natural: true }

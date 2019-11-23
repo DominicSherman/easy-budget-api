@@ -27,3 +27,4 @@ chrome-user-data
 config.js
 service-account.json
 lib/
+.coverage/
