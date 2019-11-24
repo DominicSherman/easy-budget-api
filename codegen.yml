@@ -1,0 +1,7 @@
+overwrite: true
+schema: "http://localhost:5000/easy-budget-2f9aa/us-central1/api"
+documents: null
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"

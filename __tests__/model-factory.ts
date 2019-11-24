@@ -1,0 +1,14 @@
+import {VariableCategory} from '../src/generated/graphql';
+
+const Chance = require('chance');
+
+const chance = new Chance();
+
+export const createRandomVariableCategory = (variableCategory = {}): VariableCategory => ({
+    __typename: 'VariableCategory',
+    amount: chance.natural(),
+    name: chance.string(),
+    userId: chance.string(),
+    variableCategoryId: chance.string(),
+    ...variableCategory
+});

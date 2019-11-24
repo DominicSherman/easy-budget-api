@@ -2,11 +2,11 @@ import {gql} from 'apollo-server-express';
 
 const schema = gql`
 type Query {
-    variableCategories(userId: String!): [VariableCategory!]
+    variableCategories(userId: String!): [VariableCategory!]!
 }
 
 type Mutation {
-    createVariableCategory(variableCategory: CreateVariableCategory!): VariableCategory
+    createVariableCategory(variableCategory: CreateVariableCategory!): VariableCategory!
 }
 
 type VariableCategory {

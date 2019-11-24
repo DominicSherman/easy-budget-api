@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["es2017"],
+    "allowJs": false,
+    "checkJs": false,
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "outDir": "lib/",
+    "sourceMap": true,
+    "target": "es6",
+    "allowSyntheticDefaultImports": true
+  },
+  "compileOnSave": true,
+  "include": [
+    "src"
+  ]
+}

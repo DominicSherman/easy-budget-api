@@ -26,3 +26,5 @@ chrome-user-data
 .firebase
 config.js
 service-account.json
+lib/
+.coverage/
