@@ -3,10 +3,12 @@ import * as express from 'express';
 
 import schema from '../src/schema';
 import resolverMap from '../src/resolver-map';
+import {initializeApp} from '../src/adapters/firestore-adapter';
 
 jest.mock('firebase-functions');
 jest.mock('express');
 jest.mock('apollo-server-express');
+jest.mock('../src/adapters/firestore-adapter');
 
 describe('server', () => {
     beforeAll(() => {
@@ -15,6 +17,10 @@ describe('server', () => {
     });
 
     describe('graphqlServer', () => {
+        it('should initializeApp', () => {
+            expect(initializeApp).toHaveBeenCalledTimes(1);
+        });
+
         it('should call express', () => {
             expect(express).toHaveBeenCalledTimes(1);
         });

@@ -4,10 +4,13 @@ import {Express} from 'express';
 
 import schema from './schema';
 import resolvers from './resolver-map';
+import {initializeApp} from './adapters/firestore-adapter';
 
 import express = require('express');
 
 const createGraphQLServer = (): Express => {
+    initializeApp();
+
     const app = express();
 
     const apolloServer = new ApolloServer({

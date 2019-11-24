@@ -1,11 +1,16 @@
 import admin = require('firebase-admin');
 const config = require('config');
 
-admin.initializeApp({
-    credential: admin.credential.cert(require('../../service-account')),
-    databaseURL: 'https://easy-budget-2f9aa.firebaseio.com'
-});
-const db = admin.firestore();
+let db;
+
+export const initializeApp = (): void => {
+    admin.initializeApp({
+        credential: admin.credential.cert(require('../../service-account')),
+        databaseURL: 'https://easy-budget-2f9aa.firebaseio.com'
+    });
+
+    db = admin.firestore();
+};
 
 export const setFirestoreData = (doc: string, col2: string, doc2: string, data: any): Promise<FirebaseFirestore.WriteResult> =>
     db.collection(config.get('rootPath'))

@@ -1,4 +1,4 @@
-import {getFirestoreData, setFirestoreData} from '../../src/adapters/firestore-adapter';
+import {getFirestoreData, initializeApp, setFirestoreData} from '../../src/adapters/firestore-adapter';
 
 const config = require('config');
 const Chance = require('chance');
@@ -31,6 +31,8 @@ describe('firestore adapter', () => {
     let expectedRootPath;
 
     beforeEach(() => {
+        initializeApp();
+
         expectedRootPath = chance.string();
 
         mockConfig.get.mockReturnValue(expectedRootPath);
