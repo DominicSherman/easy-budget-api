@@ -1,13 +1,13 @@
 module.exports = {
-    'collectCoverageFrom': [
+    collectCoverageFrom: [
         '<rootDir>/src/*/**/*.ts',
         '<rootDir>/src/*.ts'
     ],
-    'coverageDirectory': '.coverage',
-    'coveragePathIgnorePatterns': [
+    coverageDirectory: '.coverage',
+    coveragePathIgnorePatterns: [
         '<rootDir>/src/generated/graphql.ts'
     ],
-    'coverageThreshold': {
+    coverageThreshold: {
         'global': {
             'branches': 100,
             'functions': 100,
@@ -15,16 +15,16 @@ module.exports = {
             'statements': 100
         }
     },
-    'moduleFileExtensions': [
+    moduleFileExtensions: [
         'ts',
         'tsx',
         'js',
         'json'
     ],
-    'testMatch': [
+    testMatch: [
         '<rootDir>/__tests__/**/*.test.ts'
     ],
-    'transform': {
+    transform: {
         '\\.(ts|tsx)$': 'ts-jest'
     }
 };

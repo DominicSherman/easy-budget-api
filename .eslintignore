@@ -1,0 +1,7 @@
+.coverage/
+.idea/
+.github/
+.vscode/
+node_modules/
+src/generated
+lib/

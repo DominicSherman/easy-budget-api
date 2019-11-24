@@ -1,19 +1,12 @@
 import {getFirestoreData, setFirestoreData} from '../adapters/firestore-adapter';
+import {CreateVariableCategory, VariableCategory} from '../generated/graphql';
+import {getDataFromQuerySnapshot} from '../helpers/repository-helpers';
 
-export const insertVariableCategory = (userId, variableCategory) =>
-    setFirestoreData(userId, 'variableCategories', variableCategory.variableCategoryId, variableCategory);
+export const insertVariableCategory = (userId: string, variableCategoryInput: CreateVariableCategory): Promise<FirebaseFirestore.WriteResult> =>
+    setFirestoreData(userId, 'variableCategories', variableCategoryInput.variableCategoryId, variableCategoryInput);
 
-export const getVariableCategories = async (userId) => {
-    let variableExpenses = [];
-
+export const getVariableCategories = async (userId): Promise<VariableCategory[]> => {
     const querySnapshot = await getFirestoreData(userId, 'variableCategories');
 
-    querySnapshot.forEach((doc) => {
-        variableExpenses = [
-            ...variableExpenses,
-            doc.data()
-        ]
-    });
-
-    return variableExpenses;
+    return getDataFromQuerySnapshot(querySnapshot);
 };
