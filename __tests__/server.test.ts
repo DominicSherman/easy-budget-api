@@ -4,10 +4,6 @@ import * as express from 'express';
 import schema from '../src/schema';
 import resolverMap from '../src/resolver-map';
 
-const Chance = require('chance');
-
-const chance = new Chance();
-
 jest.mock('firebase-functions');
 jest.mock('express');
 jest.mock('apollo-server-express');
