@@ -5,7 +5,7 @@
     "checkJs": false,
     "module": "commonjs",
     "noImplicitReturns": true,
-    "outDir": "ts-build/",
+    "outDir": "lib/",
     "sourceMap": true,
     "target": "es6",
     "allowSyntheticDefaultImports": true
