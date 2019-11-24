@@ -42,35 +42,5 @@
     "jest": "24.9.0",
     "ts-jest": "24.1.0",
     "typescript": "3.7.2"
-  },
-  "jest": {
-    "coverageDirectory": ".coverage",
-    "collectCoverageFrom": [
-      "<rootDir>/src/*/**/*.ts",
-      "<rootDir>/src/*.ts"
-    ],
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/src/generated/graphql.ts"
-    ],
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    },
-    "testMatch": [
-      "<rootDir>/__tests__/**/*.test.ts"
-    ]
   }
 }
