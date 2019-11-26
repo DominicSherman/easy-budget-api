@@ -28,7 +28,16 @@ export const setFirestoreData = (doc: string, col2: string, doc2: string, data: 
         .doc(doc2)
         .set(data);
 
-export const getFirestoreData = (userId: string, collectionName: string, where?: IWhereObject): Promise<FirebaseFirestore.QuerySnapshot> => {
+export const getFirestoreData = (userId: string, collectionName: string, where?: IWhereObject, where2?: IWhereObject): Promise<FirebaseFirestore.QuerySnapshot> => {
+    if (where2) {
+        return db.collection(config.get('rootPath'))
+            .doc(userId)
+            .collection(collectionName)
+            .where(where.field, where.operator, where.value)
+            .where(where2.field, where2.operator, where2.value)
+            .get();
+    }
+
     if (where) {
         return db.collection(config.get('rootPath'))
             .doc(userId)
