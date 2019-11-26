@@ -1,20 +1,19 @@
 import * as firestoreAdapter from '../../src/adapters/firestore-adapter';
 import * as repositoryHelpers from '../../src/helpers/repository-helpers';
 import {
-    getVariableCategories,
-    getVariableCategoriesByTimePeriodId,
-    insertVariableCategory
-} from '../../src/repositories/variable-category-repository';
-import {createRandomVariableCategory} from '../model-factory';
+    getTimePeriods,
+    getTimePeriodsByDate,
+    insertTimePeriod
+} from '../../src/repositories/time-period-repository';
+import {createRandomTimePeriod} from '../model-factory';
+import {chance} from '../chance';
 
-const Chance = require('chance');
-
-const chance = new Chance();
+import moment = require('moment');
 
 jest.mock('../../src/adapters/firestore-adapter');
 jest.mock('../../src/helpers/repository-helpers');
 
-describe('variable category repository', () => {
+describe('time period repository', () => {
     const {getFirestoreData, setFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
     const {getDataFromQuerySnapshot} = repositoryHelpers as jest.Mocked<typeof repositoryHelpers>;
 
@@ -28,36 +27,35 @@ describe('variable category repository', () => {
         jest.resetAllMocks();
     });
 
-    describe('insertVariableCategory', () => {
+    describe('insertTimePeriod', () => {
         let expectedResponse,
-            expectedVariableCategory;
+            expectedTimePeriod;
 
         beforeEach(() => {
             expectedResponse = {
                 [chance.string()]: chance.string()
             };
-            expectedVariableCategory = createRandomVariableCategory();
+            expectedTimePeriod = createRandomTimePeriod();
 
             setFirestoreData.mockReturnValue(expectedResponse);
         });
 
         it('should call setFirestoreData', () => {
-            insertVariableCategory(expectedVariableCategory);
+            insertTimePeriod(expectedTimePeriod);
 
             expect(setFirestoreData).toHaveBeenCalledTimes(1);
             expect(setFirestoreData).toHaveBeenCalledWith(
-                expectedVariableCategory.userId,
-                'variableCategories',
-                expectedVariableCategory.variableCategoryId,
-                expectedVariableCategory
+                expectedTimePeriod.userId,
+                'timePeriods',
+                expectedTimePeriod.timePeriodId,
+                expectedTimePeriod
             );
         });
     });
 
-    describe('getVariableCategories', () => {
+    describe('getTimePeriods', () => {
         let expectedQuerySnapshot,
-            expectedResponse,
-            expectedWhere;
+            expectedResponse;
 
         beforeEach(() => {
             expectedQuerySnapshot = {
@@ -66,51 +64,65 @@ describe('variable category repository', () => {
             expectedResponse = {
                 [chance.string()]: chance.string()
             };
-            expectedWhere = {
-                [chance.string()]: chance.string()
-            };
 
             getFirestoreData.mockReturnValue(expectedQuerySnapshot);
             getDataFromQuerySnapshot.mockReturnValue(expectedResponse);
         });
 
         it('should call getFirestoreData', async () => {
-            await getVariableCategories(expectedUserId, expectedWhere);
+            await getTimePeriods(expectedUserId);
 
             expect(getFirestoreData).toHaveBeenCalledTimes(1);
-            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'variableCategories', expectedWhere);
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'timePeriods');
         });
 
         it('should call getDataFromQuerySnapshot', async () => {
-            await getVariableCategories(expectedUserId);
+            await getTimePeriods(expectedUserId);
 
             expect(getDataFromQuerySnapshot).toHaveBeenCalledTimes(1);
             expect(getDataFromQuerySnapshot).toHaveBeenCalledWith(expectedQuerySnapshot);
         });
 
         it('should return the data', async () => {
-            const actualResponse = await getVariableCategories(expectedUserId);
+            const actualResponse = await getTimePeriods(expectedUserId);
 
             expect(actualResponse).toEqual(expectedResponse);
         });
     });
 
-    describe('getVariableCategoriesByTimePeriodId', () => {
-        let expectedTimePeriodId;
+    describe('getTimePeriodsByDate', () => {
+        let expectedQuerySnapshot,
+            expectedActiveTimePeriod,
+            expectedInactiveTimePeriods,
+            expectedResponse,
+            expectedDate;
 
         beforeEach(() => {
-            expectedTimePeriodId = chance.guid();
+            expectedQuerySnapshot = {
+                [chance.string()]: chance.string()
+            };
+            expectedActiveTimePeriod = createRandomTimePeriod({
+                beginDate: moment().subtract(1, 'd').toISOString(),
+                endDate: moment().add(1, 'd').toISOString()
+            });
+            expectedInactiveTimePeriods = chance.n(createRandomTimePeriod, chance.d6(), {
+                beginDate: moment().subtract(2, 'M'),
+                endDate: moment().subtract(1, 'M')
+            });
+            expectedDate = moment().toISOString();
+            expectedResponse = chance.shuffle([
+                expectedActiveTimePeriod,
+                ...expectedInactiveTimePeriods
+            ]);
+
+            getFirestoreData.mockReturnValue(expectedQuerySnapshot);
+            getDataFromQuerySnapshot.mockReturnValue(expectedResponse);
         });
 
-        it('should call getFirestoreData', async () => {
-            await getVariableCategoriesByTimePeriodId(expectedUserId, expectedTimePeriodId);
+        it('should call getTimePeriods and filter down by date', async () => {
+            const activeTimePeriod = await getTimePeriodsByDate(expectedUserId, expectedDate);
 
-            expect(getFirestoreData).toHaveBeenCalledTimes(1);
-            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'variableCategories', {
-                field: 'timePeriodId',
-                operator: '==',
-                value: expectedTimePeriodId
-            });
+            expect(activeTimePeriod).toEqual([expectedActiveTimePeriod]);
         });
     });
 });

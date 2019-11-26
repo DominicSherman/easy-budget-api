@@ -1,11 +1,12 @@
 import * as firestoreAdapter from '../../src/adapters/firestore-adapter';
 import * as repositoryHelpers from '../../src/helpers/repository-helpers';
 import {
-    getVariableCategories,
-    getVariableCategoriesByTimePeriodId,
-    insertVariableCategory
-} from '../../src/repositories/variable-category-repository';
-import {createRandomVariableCategory} from '../model-factory';
+    getExpenses,
+    getExpensesByTimePeriodId,
+    getExpensesByVariableCategoryId,
+    insertExpense
+} from '../../src/repositories/expense-repository';
+import {createRandomExpense} from '../model-factory';
 
 const Chance = require('chance');
 
@@ -14,7 +15,7 @@ const chance = new Chance();
 jest.mock('../../src/adapters/firestore-adapter');
 jest.mock('../../src/helpers/repository-helpers');
 
-describe('variable category repository', () => {
+describe('expense repository', () => {
     const {getFirestoreData, setFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
     const {getDataFromQuerySnapshot} = repositoryHelpers as jest.Mocked<typeof repositoryHelpers>;
 
@@ -28,33 +29,33 @@ describe('variable category repository', () => {
         jest.resetAllMocks();
     });
 
-    describe('insertVariableCategory', () => {
+    describe('insertExpense', () => {
         let expectedResponse,
-            expectedVariableCategory;
+            expectedExpense;
 
         beforeEach(() => {
             expectedResponse = {
                 [chance.string()]: chance.string()
             };
-            expectedVariableCategory = createRandomVariableCategory();
+            expectedExpense = createRandomExpense();
 
             setFirestoreData.mockReturnValue(expectedResponse);
         });
 
         it('should call setFirestoreData', () => {
-            insertVariableCategory(expectedVariableCategory);
+            insertExpense(expectedExpense);
 
             expect(setFirestoreData).toHaveBeenCalledTimes(1);
             expect(setFirestoreData).toHaveBeenCalledWith(
-                expectedVariableCategory.userId,
-                'variableCategories',
-                expectedVariableCategory.variableCategoryId,
-                expectedVariableCategory
+                expectedExpense.userId,
+                'expenses',
+                expectedExpense.expenseId,
+                expectedExpense
             );
         });
     });
 
-    describe('getVariableCategories', () => {
+    describe('getExpenses', () => {
         let expectedQuerySnapshot,
             expectedResponse,
             expectedWhere;
@@ -75,27 +76,46 @@ describe('variable category repository', () => {
         });
 
         it('should call getFirestoreData', async () => {
-            await getVariableCategories(expectedUserId, expectedWhere);
+            await getExpenses(expectedUserId, expectedWhere);
 
             expect(getFirestoreData).toHaveBeenCalledTimes(1);
-            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'variableCategories', expectedWhere);
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'expenses', expectedWhere);
         });
 
         it('should call getDataFromQuerySnapshot', async () => {
-            await getVariableCategories(expectedUserId);
+            await getExpenses(expectedUserId);
 
             expect(getDataFromQuerySnapshot).toHaveBeenCalledTimes(1);
             expect(getDataFromQuerySnapshot).toHaveBeenCalledWith(expectedQuerySnapshot);
         });
 
         it('should return the data', async () => {
-            const actualResponse = await getVariableCategories(expectedUserId);
+            const actualResponse = await getExpenses(expectedUserId);
 
             expect(actualResponse).toEqual(expectedResponse);
         });
     });
 
-    describe('getVariableCategoriesByTimePeriodId', () => {
+    describe('getExpensesByVariableCategoryId', () => {
+        let expectedVariableCategoryId;
+
+        beforeEach(() => {
+            expectedVariableCategoryId = chance.guid();
+        });
+
+        it('should call getFirestoreData', async () => {
+            await getExpensesByVariableCategoryId(expectedUserId, expectedVariableCategoryId);
+
+            expect(getFirestoreData).toHaveBeenCalledTimes(1);
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'expenses', {
+                field: 'variableCategoryId',
+                operator: '==',
+                value: expectedVariableCategoryId
+            });
+        });
+    });
+
+    describe('getExpensesByTimePeriodId', () => {
         let expectedTimePeriodId;
 
         beforeEach(() => {
@@ -103,10 +123,10 @@ describe('variable category repository', () => {
         });
 
         it('should call getFirestoreData', async () => {
-            await getVariableCategoriesByTimePeriodId(expectedUserId, expectedTimePeriodId);
+            await getExpensesByTimePeriodId(expectedUserId, expectedTimePeriodId);
 
             expect(getFirestoreData).toHaveBeenCalledTimes(1);
-            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'variableCategories', {
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'expenses', {
                 field: 'timePeriodId',
                 operator: '==',
                 value: expectedTimePeriodId
