@@ -12,5 +12,12 @@ export default {
         expenses: getExpensesResolver,
         timePeriods: getTimePeriodsResolver,
         variableCategories: getVariableCategoryResolver
+    },
+    TimePeriod: {
+        expenses: getExpensesResolver,
+        variableCategories: getVariableCategoryResolver
+    },
+    VariableCategory: {
+        expenses: getExpensesResolver
     }
 };

@@ -20,6 +20,7 @@ export type CreateExpense = {
   expenseId: Scalars['String'],
   userId: Scalars['String'],
   variableCategoryId: Scalars['String'],
+  timePeriodId: Scalars['String'],
   amount: Scalars['Float'],
   date: Scalars['String'],
   name?: Maybe<Scalars['String']>,
@@ -34,6 +35,7 @@ export type CreateTimePeriod = {
 
 export type CreateVariableCategory = {
   variableCategoryId: Scalars['String'],
+  timePeriodId: Scalars['String'],
   userId: Scalars['String'],
   amount: Scalars['Int'],
   name: Scalars['String'],
@@ -44,9 +46,15 @@ export type Expense = {
   expenseId: Scalars['ID'],
   userId: Scalars['String'],
   variableCategoryId: Scalars['String'],
+  timePeriodId: Scalars['String'],
   amount: Scalars['Float'],
   date: Scalars['String'],
   name?: Maybe<Scalars['String']>,
+};
+
+export type ExpenseInput = {
+  variableCategoryId?: Maybe<Scalars['String']>,
+  timePeriodId?: Maybe<Scalars['String']>,
 };
 
 export type Mutation = {
@@ -81,18 +89,20 @@ export type Query = {
 
 export type QueryExpensesArgs = {
   userId: Scalars['String'],
-  variableCategoryId?: Maybe<Scalars['String']>
+  variableCategoryId?: Maybe<Scalars['String']>,
+  timePeriodId?: Maybe<Scalars['String']>
 };
 
 
 export type QueryTimePeriodsArgs = {
   userId: Scalars['String'],
-  where?: Maybe<TimePeriodInput>
+  date?: Maybe<Scalars['String']>
 };
 
 
 export type QueryVariableCategoriesArgs = {
-  userId: Scalars['String']
+  userId: Scalars['String'],
+  timePeriodId?: Maybe<Scalars['String']>
 };
 
 export type TimePeriod = {
@@ -103,15 +113,11 @@ export type TimePeriod = {
   userId: Scalars['String'],
 };
 
-export type TimePeriodInput = {
-  beginDate: Scalars['String'],
-  endDate: Scalars['String'],
-};
-
 
 export type VariableCategory = {
    __typename?: 'VariableCategory',
   variableCategoryId: Scalars['ID'],
+  timePeriodId: Scalars['String'],
   userId: Scalars['String'],
   amount: Scalars['Int'],
   name: Scalars['String'],

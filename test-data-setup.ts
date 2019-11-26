@@ -17,8 +17,8 @@ const timePeriods = [
         userId
     },
     {
-        beginDate: moment().subtract(2, 'm').subtract(2, 'd').toISOString(),
-        endDate: moment().subtract(2, 'm').add(28, 'd').toISOString(),
+        beginDate: moment().subtract(2, 'M').subtract(2, 'd').toISOString(),
+        endDate: moment().subtract(2, 'M').add(28, 'd').toISOString(),
         timePeriodId: uuid.v4(),
         userId
     }

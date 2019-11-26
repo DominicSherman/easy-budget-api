@@ -4,6 +4,8 @@ type TimePeriod {
     beginDate: String!
     endDate: String!
     userId: String!
+    variableCategories: [VariableCategory!]!
+    expenses: [Expense!]!
 }
 
 input CreateTimePeriod {
@@ -11,10 +13,5 @@ input CreateTimePeriod {
     beginDate: String!
     endDate: String!
     userId: String!
-}
-
-input TimePeriodInput {
-    beginDate: String!
-    endDate: String!
 }
 `;

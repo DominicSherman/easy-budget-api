@@ -10,10 +10,10 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
 };
 
 export const getTimePeriodsResolver = (root: any, args: QueryTimePeriodsArgs): Promise<TimePeriod[]> => {
-    const {userId, where} = args;
+    const {userId, date} = args;
 
-    if (where) {
-        return getTimePeriodsByDate(userId, where.beginDate, where.endDate);
+    if (date) {
+        return getTimePeriodsByDate(userId, date);
     }
 
     return getTimePeriods(userId);

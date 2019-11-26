@@ -5,6 +5,7 @@ type VariableCategory {
     userId: String!
     amount: Int!
     name: String!
+    expenses: [Expense!]!
 }
 
 input CreateVariableCategory {
