@@ -5,7 +5,8 @@ module.exports = {
     ],
     coverageDirectory: '.coverage',
     coveragePathIgnorePatterns: [
-        '<rootDir>/src/generated/graphql.ts'
+        '<rootDir>/src/generated/graphql.ts',
+        '<rootDir>/src/get-service-account.ts'
     ],
     coverageThreshold: {
         'global': {

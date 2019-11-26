@@ -14,7 +14,10 @@ jest.mock('firebase-admin', () => ({
                     doc: jest.fn(() => ({
                         set: jest.fn()
                     })),
-                    get: jest.fn()
+                    get: jest.fn(),
+                    where: jest.fn(() => ({
+                        get: jest.fn()
+                    }))
                 }))
             }))
         }))
@@ -75,6 +78,17 @@ describe('firestore adapter', () => {
 
         it('should call collection with the rootPath from config', () => {
             getFirestoreData(expectedUserId, expectedCollectionName);
+
+            expect(mockConfig.get).toHaveBeenCalledTimes(1);
+            expect(mockConfig.get).toHaveBeenCalledWith('rootPath');
+        });
+
+        it('should call collection with the rootPath from config when a where is passed in', () => {
+            getFirestoreData(expectedUserId, expectedCollectionName, {
+                field: chance.string(),
+                operator: '<',
+                value: chance.string()
+            });
 
             expect(mockConfig.get).toHaveBeenCalledTimes(1);
             expect(mockConfig.get).toHaveBeenCalledWith('rootPath');
