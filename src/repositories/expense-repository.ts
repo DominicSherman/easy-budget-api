@@ -20,5 +20,15 @@ export const getExpensesByVariableCategoryId = (userId: string, variableCategory
     return getExpenses(userId, where);
 };
 
+export const getExpensesByTimePeriodId = (userId: string, timePeriodId: string): Promise<Expense[]> => {
+    const where: IWhereObject = {
+        field: 'timePeriodId',
+        operator: '==',
+        value: timePeriodId
+    };
+
+    return getExpenses(userId, where);
+};
+
 export const insertExpense = (expenseInput: CreateExpense): Promise<FirebaseFirestore.WriteResult> =>
     setFirestoreData(expenseInput.userId, COLLECTION_NAME, expenseInput.expenseId, expenseInput);

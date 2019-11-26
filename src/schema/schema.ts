@@ -6,7 +6,7 @@ import {timePeriod} from './time-period';
 
 const schema = gql`
 type Query {
-    expenses(userId: String!, where: ExpenseInput): [Expense!]!
+    expenses(userId: String!, variableCategoryId: String, timePeriodId: String): [Expense!]!
     timePeriods(userId: String!, where: TimePeriodInput): [TimePeriod!]!
     variableCategories(userId: String!, timePeriodId: String): [VariableCategory!]!
 }
