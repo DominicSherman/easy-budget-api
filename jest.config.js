@@ -21,6 +21,7 @@ module.exports = {
         'js',
         'json'
     ],
+    setupFilesAfterEnv: ['jest-chain'],
     testMatch: [
         '<rootDir>/__tests__/**/*.test.ts'
     ],

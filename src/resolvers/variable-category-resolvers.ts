@@ -1,6 +1,6 @@
 import {
     getVariableCategories,
-    getVariableCategoryByTimePeriodId,
+    getVariableCategoriesByTimePeriodId,
     insertVariableCategory
 } from '../repositories/variable-category-repository';
 import {
@@ -24,7 +24,7 @@ export const getVariableCategoryResolver = (root: any, args: QueryVariableCatego
     const timePeriodId = getPropertyFromArgsOrRoot(root, args, 'timePeriodId');
 
     if (timePeriodId) {
-        return getVariableCategoryByTimePeriodId(userId, timePeriodId);
+        return getVariableCategoriesByTimePeriodId(userId, timePeriodId);
     }
 
     return getVariableCategories(userId);

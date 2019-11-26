@@ -5,11 +5,14 @@ import {
     createVariableCategoryResolver,
     getVariableCategoryResolver
 } from '../../src/resolvers/variable-category-resolvers';
+import * as resolverHelpers from '../../src/helpers/resolver-helpers';
 
 jest.mock('../../src/repositories/variable-category-repository');
+jest.mock('../../src/helpers/resolver-helpers');
 
 describe('variable category resolvers', () => {
-    const {getVariableCategories, insertVariableCategory} = variableCategoryRepository as jest.Mocked<typeof variableCategoryRepository>;
+    const {getVariableCategoriesByTimePeriodId, getVariableCategories, insertVariableCategory} = variableCategoryRepository as jest.Mocked<typeof variableCategoryRepository>;
+    const {getPropertyFromArgsOrRoot} = resolverHelpers as jest.Mocked<typeof resolverHelpers>;
 
     let root,
         args;
@@ -19,8 +22,7 @@ describe('variable category resolvers', () => {
             [chance.string()]: chance.string()
         };
         args = {
-            [chance.string()]: chance.string(),
-            userId: chance.string()
+            [chance.string()]: chance.string()
         };
     });
 
@@ -39,10 +41,7 @@ describe('variable category resolvers', () => {
             await createVariableCategoryResolver(root, args);
 
             expect(insertVariableCategory).toHaveBeenCalledTimes(1);
-            expect(insertVariableCategory).toHaveBeenCalledWith(
-                expectedCreateVariableCategory.userId,
-                expectedCreateVariableCategory
-            );
+            expect(insertVariableCategory).toHaveBeenCalledWith(expectedCreateVariableCategory);
         });
 
         it('should return the input', async () => {
@@ -53,25 +52,59 @@ describe('variable category resolvers', () => {
     });
 
     describe('getVariableCategoryResolver', () => {
-        let expectedVariableCategories;
+        let expectedVariableCategories,
+            expectedUserId,
+            expectedTimePeriodId;
 
         beforeEach(() => {
             expectedVariableCategories = chance.n(createRandomVariableCategory, chance.d6());
+            expectedUserId = chance.guid();
+            expectedTimePeriodId = chance.guid();
 
             getVariableCategories.mockReturnValue(expectedVariableCategories);
+            getVariableCategoriesByTimePeriodId.mockReturnValue(expectedVariableCategories);
         });
 
-        it('should call insertVariableCategory', async () => {
-            await getVariableCategoryResolver(root, args);
+        describe('when there is no timePeriodId', () => {
+            beforeEach(() => {
+                getPropertyFromArgsOrRoot
+                    .mockReturnValueOnce(expectedUserId)
+                    .mockReturnValueOnce(null);
+            });
 
-            expect(getVariableCategories).toHaveBeenCalledTimes(1);
-            expect(getVariableCategories).toHaveBeenCalledWith(args.userId);
+            it('should call getVariableCategories', async () => {
+                await getVariableCategoryResolver(root, args);
+
+                expect(getVariableCategories).toHaveBeenCalledTimes(1);
+                expect(getVariableCategories).toHaveBeenCalledWith(expectedUserId);
+            });
+
+            it('should return the variable categories', async () => {
+                const actualResponse = await getVariableCategoryResolver(root, args);
+
+                expect(actualResponse).toEqual(expectedVariableCategories);
+            });
         });
 
-        it('should return the variable categories', async () => {
-            const actualResponse = await getVariableCategoryResolver(root, args);
+        describe('when there is a timePeriodId', () => {
+            beforeEach(() => {
+                getPropertyFromArgsOrRoot
+                    .mockReturnValueOnce(expectedUserId)
+                    .mockReturnValueOnce(expectedTimePeriodId);
+            });
 
-            expect(actualResponse).toEqual(expectedVariableCategories);
+            it('should call getVariableCategoriesByTimePeriodId', async () => {
+                await getVariableCategoryResolver(root, args);
+
+                expect(getVariableCategoriesByTimePeriodId).toHaveBeenCalledTimes(1);
+                expect(getVariableCategoriesByTimePeriodId).toHaveBeenCalledWith(expectedUserId, expectedTimePeriodId);
+            });
+
+            it('should return the variable categories', async () => {
+                const actualVariableCategories = await getVariableCategoryResolver(root, args);
+
+                expect(actualVariableCategories).toEqual(expectedVariableCategories);
+            });
         });
     });
 });

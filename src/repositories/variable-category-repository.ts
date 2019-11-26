@@ -13,7 +13,7 @@ export const getVariableCategories = async (userId: string, where?: IWhereObject
     return getDataFromQuerySnapshot(querySnapshot);
 };
 
-export const getVariableCategoryByTimePeriodId = (userId: string, timePeriodId: string): Promise<VariableCategory[]> => {
+export const getVariableCategoriesByTimePeriodId = (userId: string, timePeriodId: string): Promise<VariableCategory[]> => {
     const where: IWhereObject = {
         field: 'timePeriodId',
         operator: '==',

@@ -21,11 +21,11 @@ export const initializeApp = (): void => {
     db = admin.firestore();
 };
 
-export const setFirestoreData = (doc: string, col2: string, doc2: string, data: any): Promise<FirebaseFirestore.WriteResult> =>
+export const setFirestoreData = (userId: string, collectionName: string, collectionId: string, data: any): Promise<FirebaseFirestore.WriteResult> =>
     db.collection(config.get('rootPath'))
-        .doc(doc)
-        .collection(col2)
-        .doc(doc2)
+        .doc(userId)
+        .collection(collectionName)
+        .doc(collectionId)
         .set(data);
 
 export const getFirestoreData = (userId: string, collectionName: string, where?: IWhereObject): Promise<FirebaseFirestore.QuerySnapshot> => {

@@ -8,7 +8,8 @@ export const createRandomVariableCategory = (variableCategory = {}): VariableCat
     __typename: 'VariableCategory',
     amount: chance.natural(),
     name: chance.string(),
+    timePeriodId: chance.guid(),
     userId: chance.string(),
-    variableCategoryId: chance.string(),
+    variableCategoryId: chance.guid(),
     ...variableCategory
 });
