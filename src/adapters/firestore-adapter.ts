@@ -1,9 +1,16 @@
-import {getServiceAccount} from '../../get-service-account';
+import {getServiceAccount} from '../get-service-account';
 
 import admin = require('firebase-admin');
+
 const config = require('config');
 
 let db;
+
+export interface IWhereObject {
+    field: string
+    operator: '<' | '<=' | '==' | '>=' | '>' | 'array-contains'
+    value: string
+}
 
 export const initializeApp = (): void => {
     admin.initializeApp({
@@ -21,8 +28,17 @@ export const setFirestoreData = (doc: string, col2: string, doc2: string, data: 
         .doc(doc2)
         .set(data);
 
-export const getFirestoreData = (userId: string, collectionName: string): Promise<FirebaseFirestore.QuerySnapshot> =>
-    db.collection(config.get('rootPath'))
+export const getFirestoreData = (userId: string, collectionName: string, where?: IWhereObject): Promise<FirebaseFirestore.QuerySnapshot> => {
+    if (where) {
+        return db.collection(config.get('rootPath'))
+            .doc(userId)
+            .collection(collectionName)
+            .where(where.field, where.operator, where.value)
+            .get();
+    }
+
+    return db.collection(config.get('rootPath'))
         .doc(userId)
         .collection(collectionName)
         .get();
+};

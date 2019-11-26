@@ -2,7 +2,7 @@ import {gql} from 'apollo-server-express';
 
 const schema = gql`
 type Query {
-    expenses(userId: String!, variableCategoryId: Id): [Expense!]!
+    expenses(userId: String!, variableCategoryId: String): [Expense!]!
     variableCategories(userId: String!): [VariableCategory!]!
 }
 

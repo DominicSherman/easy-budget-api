@@ -16,6 +16,14 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type CreateExpense = {
+  expenseId: Scalars['String'],
+  userId: Scalars['String'],
+  variableCategoryId: Scalars['String'],
+  amount: Scalars['Int'],
+  name?: Maybe<Scalars['String']>,
+};
+
 export type CreateVariableCategory = {
   variableCategoryId: Scalars['String'],
   userId: Scalars['String'],
@@ -23,9 +31,19 @@ export type CreateVariableCategory = {
   name: Scalars['String'],
 };
 
+export type Expense = {
+   __typename?: 'Expense',
+  expenseId: Scalars['ID'],
+  userId: Scalars['String'],
+  variableCategoryId: Scalars['String'],
+  amount: Scalars['Int'],
+  name?: Maybe<Scalars['String']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   createVariableCategory: VariableCategory,
+  createExpense: Expense,
 };
 
 
@@ -33,9 +51,21 @@ export type MutationCreateVariableCategoryArgs = {
   variableCategory: CreateVariableCategory
 };
 
+
+export type MutationCreateExpenseArgs = {
+  expense: CreateExpense
+};
+
 export type Query = {
    __typename?: 'Query',
+  expenses: Array<Expense>,
   variableCategories: Array<VariableCategory>,
+};
+
+
+export type QueryExpensesArgs = {
+  userId: Scalars['String'],
+  variableCategoryId?: Maybe<Scalars['String']>
 };
 
 

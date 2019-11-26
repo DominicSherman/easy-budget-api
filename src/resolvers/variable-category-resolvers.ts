@@ -9,7 +9,7 @@ import {
 export const createVariableCategoryResolver = async (root: any, args: MutationCreateVariableCategoryArgs): Promise<CreateVariableCategory> => {
     const {variableCategory} = args;
 
-    await insertVariableCategory(variableCategory.userId, variableCategory);
+    await insertVariableCategory(variableCategory);
 
     return variableCategory;
 };

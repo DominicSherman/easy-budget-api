@@ -3,7 +3,7 @@ import {createExpenseResolver, getExpensesResolver} from './resolvers/expense-re
 
 export default {
     Mutation: {
-        createExpenses: createExpenseResolver,
+        createExpense: createExpenseResolver,
         createVariableCategory: createVariableCategoryResolver
     },
     Query: {
