@@ -19,7 +19,7 @@ export const createVariableCategoryResolver = async (root: any, args: MutationCr
     return variableCategory;
 };
 
-export const getVariableCategoryResolver = (root: any, args: QueryVariableCategoriesArgs): Promise<VariableCategory[]> => {
+export const getVariableCategoriesResolver = (root: any, args: QueryVariableCategoriesArgs): Promise<VariableCategory[]> => {
     const userId = getPropertyFromArgsOrRoot(root, args, 'userId');
     const timePeriodId = getPropertyFromArgsOrRoot(root, args, 'timePeriodId');
 

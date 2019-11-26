@@ -3,7 +3,7 @@ import {createRandomVariableCategory} from '../model-factory';
 import * as variableCategoryRepository from '../../src/repositories/variable-category-repository';
 import {
     createVariableCategoryResolver,
-    getVariableCategoryResolver
+    getVariableCategoriesResolver
 } from '../../src/resolvers/variable-category-resolvers';
 import * as resolverHelpers from '../../src/helpers/resolver-helpers';
 
@@ -73,14 +73,14 @@ describe('variable category resolvers', () => {
             });
 
             it('should call getVariableCategories', async () => {
-                await getVariableCategoryResolver(root, args);
+                await getVariableCategoriesResolver(root, args);
 
                 expect(getVariableCategories).toHaveBeenCalledTimes(1);
                 expect(getVariableCategories).toHaveBeenCalledWith(expectedUserId);
             });
 
             it('should return the variable categories', async () => {
-                const actualResponse = await getVariableCategoryResolver(root, args);
+                const actualResponse = await getVariableCategoriesResolver(root, args);
 
                 expect(actualResponse).toEqual(expectedVariableCategories);
             });
@@ -94,14 +94,14 @@ describe('variable category resolvers', () => {
             });
 
             it('should call getVariableCategoriesByTimePeriodId', async () => {
-                await getVariableCategoryResolver(root, args);
+                await getVariableCategoriesResolver(root, args);
 
                 expect(getVariableCategoriesByTimePeriodId).toHaveBeenCalledTimes(1);
                 expect(getVariableCategoriesByTimePeriodId).toHaveBeenCalledWith(expectedUserId, expectedTimePeriodId);
             });
 
             it('should return the variable categories', async () => {
-                const actualVariableCategories = await getVariableCategoryResolver(root, args);
+                const actualVariableCategories = await getVariableCategoriesResolver(root, args);
 
                 expect(actualVariableCategories).toEqual(expectedVariableCategories);
             });

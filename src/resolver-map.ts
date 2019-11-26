@@ -1,4 +1,4 @@
-import {createVariableCategoryResolver, getVariableCategoryResolver} from './resolvers/variable-category-resolvers';
+import {createVariableCategoryResolver, getVariableCategoriesResolver} from './resolvers/variable-category-resolvers';
 import {createExpenseResolver, getExpensesResolver} from './resolvers/expense-resolvers';
 import {createTimePeriodResolver, getTimePeriodsResolver} from './resolvers/time-period-resolvers';
 
@@ -11,11 +11,11 @@ export default {
     Query: {
         expenses: getExpensesResolver,
         timePeriods: getTimePeriodsResolver,
-        variableCategories: getVariableCategoryResolver
+        variableCategories: getVariableCategoriesResolver
     },
     TimePeriod: {
         expenses: getExpensesResolver,
-        variableCategories: getVariableCategoryResolver
+        variableCategories: getVariableCategoriesResolver
     },
     VariableCategory: {
         expenses: getExpensesResolver
