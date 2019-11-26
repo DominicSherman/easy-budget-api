@@ -1,6 +1,7 @@
 import {getTimePeriods, getTimePeriodsByDate, insertTimePeriod} from '../repositories/time-period-repository';
+import {MutationCreateTimePeriodArgs, QueryTimePeriodsArgs, TimePeriod} from '../generated/graphql';
 
-export const createTimePeriodResolver = async (root: any, args: any): Promise<any> => {
+export const createTimePeriodResolver = async (root: any, args: MutationCreateTimePeriodArgs): Promise<TimePeriod> => {
     const {timePeriod} = args;
 
     await insertTimePeriod(timePeriod);
@@ -8,7 +9,7 @@ export const createTimePeriodResolver = async (root: any, args: any): Promise<an
     return timePeriod;
 };
 
-export const getTimePeriodsResolver = (root: any, args: any): Promise<any> => {
+export const getTimePeriodsResolver = (root: any, args: QueryTimePeriodsArgs): Promise<TimePeriod[]> => {
     const {userId, where} = args;
 
     if (where) {

@@ -20,8 +20,16 @@ export type CreateExpense = {
   expenseId: Scalars['String'],
   userId: Scalars['String'],
   variableCategoryId: Scalars['String'],
-  amount: Scalars['Int'],
+  amount: Scalars['Float'],
+  date: Scalars['String'],
   name?: Maybe<Scalars['String']>,
+};
+
+export type CreateTimePeriod = {
+  timePeriodId: Scalars['String'],
+  beginDate: Scalars['String'],
+  endDate: Scalars['String'],
+  userId: Scalars['String'],
 };
 
 export type CreateVariableCategory = {
@@ -36,19 +44,16 @@ export type Expense = {
   expenseId: Scalars['ID'],
   userId: Scalars['String'],
   variableCategoryId: Scalars['String'],
-  amount: Scalars['Int'],
+  amount: Scalars['Float'],
+  date: Scalars['String'],
   name?: Maybe<Scalars['String']>,
 };
 
 export type Mutation = {
    __typename?: 'Mutation',
-  createVariableCategory: VariableCategory,
   createExpense: Expense,
-};
-
-
-export type MutationCreateVariableCategoryArgs = {
-  variableCategory: CreateVariableCategory
+  createTimePeriod: TimePeriod,
+  createVariableCategory: VariableCategory,
 };
 
 
@@ -56,9 +61,20 @@ export type MutationCreateExpenseArgs = {
   expense: CreateExpense
 };
 
+
+export type MutationCreateTimePeriodArgs = {
+  timePeriod: CreateTimePeriod
+};
+
+
+export type MutationCreateVariableCategoryArgs = {
+  variableCategory: CreateVariableCategory
+};
+
 export type Query = {
    __typename?: 'Query',
   expenses: Array<Expense>,
+  timePeriods: Array<TimePeriod>,
   variableCategories: Array<VariableCategory>,
 };
 
@@ -69,8 +85,27 @@ export type QueryExpensesArgs = {
 };
 
 
+export type QueryTimePeriodsArgs = {
+  userId: Scalars['String'],
+  where?: Maybe<TimePeriodInput>
+};
+
+
 export type QueryVariableCategoriesArgs = {
   userId: Scalars['String']
+};
+
+export type TimePeriod = {
+   __typename?: 'TimePeriod',
+  timePeriodId: Scalars['ID'],
+  beginDate: Scalars['String'],
+  endDate: Scalars['String'],
+  userId: Scalars['String'],
+};
+
+export type TimePeriodInput = {
+  beginDate: Scalars['String'],
+  endDate: Scalars['String'],
 };
 
 
