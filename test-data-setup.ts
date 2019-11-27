@@ -5,6 +5,7 @@ const moment = require('moment');
 
 const {insertTimePeriod} = require('./lib/repositories/time-period-repository');
 const {insertVariableCategory} = require('./lib/repositories/variable-category-repository');
+const {insertFixedCategory} = require('./lib/repositories/fixed-category-repository');
 const {insertExpense} = require('./lib/repositories/expense-repository');
 
 const userId = 'KRrbQtb3Lwc41ispywo5Ci72vow2';
@@ -52,6 +53,41 @@ const variableCategories = [
         timePeriodId: timePeriods[1].timePeriodId,
         userId,
         variableCategoryId: uuid.v4()
+    }
+];
+
+const fixedCategories = [
+    {
+        amount: 1200,
+        fixedCategoryId: uuid.v4(),
+        name: 'Rent',
+        paid: false,
+        timePeriodId: timePeriods[0].timePeriodId,
+        userId
+    },
+    {
+        amount: 120,
+        fixedCategoryId: uuid.v4(),
+        name: 'Insurance',
+        paid: false,
+        timePeriodId: timePeriods[0].timePeriodId,
+        userId
+    },
+    {
+        amount: 70,
+        fixedCategoryId: uuid.v4(),
+        name: 'Phone Bill',
+        paid: false,
+        timePeriodId: timePeriods[0].timePeriodId,
+        userId
+    },
+    {
+        amount: 1200,
+        fixedCategoryId: uuid.v4(),
+        name: 'Rent',
+        paid: false,
+        timePeriodId: timePeriods[1].timePeriodId,
+        userId
     }
 ];
 
@@ -103,6 +139,9 @@ const addTestData = () => {
     });
     variableCategories.forEach((variableCategory) => {
         insertVariableCategory(variableCategory);
+    });
+    fixedCategories.forEach((fixedCategory) => {
+        insertFixedCategory(fixedCategory);
     });
     expenses.forEach((expense) => {
         insertExpense(expense);

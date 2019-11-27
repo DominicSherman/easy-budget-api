@@ -1,16 +1,6 @@
-import {Expense, TimePeriod, VariableCategory} from '../src/generated/graphql';
+import {Expense, FixedCategory, TimePeriod, VariableCategory} from '../src/generated/graphql';
 
 import {chance} from './chance';
-
-export const createRandomVariableCategory = (variableCategory = {}): VariableCategory => ({
-    __typename: 'VariableCategory',
-    amount: chance.natural(),
-    name: chance.string(),
-    timePeriodId: chance.guid(),
-    userId: chance.string(),
-    variableCategoryId: chance.guid(),
-    ...variableCategory
-});
 
 export const createRandomExpense = (expense = {}): Expense => ({
     __typename: 'Expense',
@@ -24,11 +14,36 @@ export const createRandomExpense = (expense = {}): Expense => ({
     ...expense
 });
 
+export const createRandomVariableCategory = (variableCategory = {}): VariableCategory => ({
+    __typename: 'VariableCategory',
+    amount: chance.natural(),
+    expenses: chance.n(createRandomExpense, chance.d6()),
+    name: chance.string(),
+    timePeriodId: chance.guid(),
+    userId: chance.string(),
+    variableCategoryId: chance.guid(),
+    ...variableCategory
+});
+
+export const createRandomFixedCategory = (fixedCategory = {}): FixedCategory => ({
+    __typename: 'FixedCategory',
+    amount: chance.natural(),
+    fixedCategoryId: chance.guid(),
+    name: chance.string(),
+    paid: chance.bool(),
+    timePeriodId: chance.guid(),
+    userId: chance.string(),
+    ...fixedCategory
+});
+
 export const createRandomTimePeriod = (timePeriod = {}): TimePeriod => ({
     __typename: 'TimePeriod',
     beginDate: chance.date().toString(),
     endDate: chance.date().toString(),
+    expenses: chance.n(createRandomExpense, chance.d6()),
+    fixedCategories: chance.n(createRandomFixedCategory, chance.d6()),
     timePeriodId: chance.guid(),
     userId: chance.string(),
+    variableCategories: chance.n(createRandomVariableCategory, chance.d6()),
     ...timePeriod
 });

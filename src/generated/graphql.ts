@@ -26,6 +26,15 @@ export type CreateExpense = {
   name?: Maybe<Scalars['String']>,
 };
 
+export type CreateFixedCategory = {
+  fixedCategoryId: Scalars['ID'],
+  timePeriodId: Scalars['String'],
+  userId: Scalars['String'],
+  amount: Scalars['Int'],
+  name: Scalars['String'],
+  paid: Scalars['Boolean'],
+};
+
 export type CreateTimePeriod = {
   timePeriodId: Scalars['String'],
   beginDate: Scalars['String'],
@@ -57,9 +66,20 @@ export type ExpenseInput = {
   timePeriodId?: Maybe<Scalars['String']>,
 };
 
+export type FixedCategory = {
+   __typename?: 'FixedCategory',
+  fixedCategoryId: Scalars['ID'],
+  timePeriodId: Scalars['String'],
+  userId: Scalars['String'],
+  amount: Scalars['Int'],
+  name: Scalars['String'],
+  paid: Scalars['Boolean'],
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   createExpense: Expense,
+  createFixedCategory: FixedCategory,
   createTimePeriod: TimePeriod,
   createVariableCategory: VariableCategory,
 };
@@ -67,6 +87,11 @@ export type Mutation = {
 
 export type MutationCreateExpenseArgs = {
   expense: CreateExpense
+};
+
+
+export type MutationCreateFixedCategoryArgs = {
+  fixedCategory: CreateFixedCategory
 };
 
 
@@ -82,6 +107,7 @@ export type MutationCreateVariableCategoryArgs = {
 export type Query = {
    __typename?: 'Query',
   expenses: Array<Expense>,
+  fixedCategories: Array<FixedCategory>,
   timePeriods: Array<TimePeriod>,
   variableCategories: Array<VariableCategory>,
 };
@@ -90,6 +116,13 @@ export type Query = {
 export type QueryExpensesArgs = {
   userId: Scalars['String'],
   variableCategoryId?: Maybe<Scalars['String']>,
+  timePeriodId?: Maybe<Scalars['String']>
+};
+
+
+export type QueryFixedCategoriesArgs = {
+  userId: Scalars['String'],
+  fixedCategoryId?: Maybe<Scalars['String']>,
   timePeriodId?: Maybe<Scalars['String']>
 };
 
@@ -111,6 +144,9 @@ export type TimePeriod = {
   beginDate: Scalars['String'],
   endDate: Scalars['String'],
   userId: Scalars['String'],
+  fixedCategories: Array<FixedCategory>,
+  variableCategories: Array<VariableCategory>,
+  expenses: Array<Expense>,
 };
 
 
@@ -121,4 +157,5 @@ export type VariableCategory = {
   userId: Scalars['String'],
   amount: Scalars['Int'],
   name: Scalars['String'],
+  expenses: Array<Expense>,
 };
