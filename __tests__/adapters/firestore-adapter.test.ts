@@ -25,7 +25,6 @@ jest.mock('firebase-admin', () => ({
     initializeApp: jest.fn()
 }));
 jest.mock('config');
-jest.mock('../../src/get-service-account');
 
 const chance = new Chance();
 
