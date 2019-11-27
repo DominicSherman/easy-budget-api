@@ -38,3 +38,10 @@ export const getFirestoreData = (userId: string, collectionName: string, where?:
         .collection(collectionName)
         .get();
 };
+
+export const deleteFirestoreData = (userId: string, collectionName: string, collectionId: string): Promise<FirebaseFirestore.WriteResult> =>
+    db.collection(config.get('rootPath'))
+        .doc(userId)
+        .collection(collectionName)
+        .doc(collectionId)
+        .delete();

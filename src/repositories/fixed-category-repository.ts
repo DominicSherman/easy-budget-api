@@ -1,4 +1,4 @@
-import {getFirestoreData, IWhereObject, setFirestoreData} from '../adapters/firestore-adapter';
+import {deleteFirestoreData, getFirestoreData, IWhereObject, setFirestoreData} from '../adapters/firestore-adapter';
 import {getDataFromQuerySnapshot} from '../helpers/repository-helpers';
 import {CreateFixedCategory, FixedCategory} from '../generated/graphql';
 
@@ -6,6 +6,9 @@ const COLLECTION_NAME = 'fixedCategories';
 
 export const insertFixedCategory = (fixedCategoryInput: CreateFixedCategory): Promise<FirebaseFirestore.WriteResult> =>
     setFirestoreData(fixedCategoryInput.userId, COLLECTION_NAME, fixedCategoryInput.fixedCategoryId, fixedCategoryInput);
+
+export const deleteFixedCategory = (userId: string, fixedCategoryId: string): Promise<FirebaseFirestore.WriteResult> =>
+    deleteFirestoreData(userId, COLLECTION_NAME, fixedCategoryId);
 
 export const getFixedCategories = async (userId: string, where?: IWhereObject): Promise<FixedCategory[]> => {
     const querySnapshot = await getFirestoreData(userId, COLLECTION_NAME, where);
