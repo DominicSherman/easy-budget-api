@@ -1,4 +1,7 @@
 name: Deploy
+  env:
+    FIREBASE_TOKEN: ${{ secrets.firebase_authentication }}
+
 
 on:
   push:
@@ -19,4 +22,4 @@ jobs:
     - name: yarn deploy
       run: |
         yarn
-        yarn deploy
+        yarn deploy --token "$FIREBASE_TOKEN"
