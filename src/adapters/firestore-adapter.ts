@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
-import 'firebase-functions';
+
+import {getServiceAccount} from '../get-service-account';
 
 const config = require('config');
 
@@ -12,7 +13,16 @@ export interface IWhereObject {
 }
 
 export const initializeApp = (): void => {
-    admin.initializeApp();
+    const serviceAccount = getServiceAccount();
+
+    if (serviceAccount) {
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+            databaseURL: 'https://easy-budget-2f9aa.firebaseio.com'
+        });
+    } else {
+        admin.initializeApp();
+    }
 
     db = admin.firestore();
 };

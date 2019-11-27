@@ -1,4 +1,7 @@
+import * as admin from 'firebase-admin';
+
 import {getFirestoreData, initializeApp, setFirestoreData} from '../../src/adapters/firestore-adapter';
+import * as serviceAccount from '../../src/get-service-account';
 
 const config = require('config');
 const Chance = require('chance');
@@ -25,11 +28,13 @@ jest.mock('firebase-admin', () => ({
     initializeApp: jest.fn()
 }));
 jest.mock('config');
+jest.mock('../../src/get-service-account');
 
 const chance = new Chance();
 
 describe('firestore adapter', () => {
     const mockConfig = config as jest.Mocked<typeof config>;
+    const {getServiceAccount} = serviceAccount as jest.Mocked<typeof serviceAccount>;
 
     let expectedRootPath;
 
@@ -43,6 +48,24 @@ describe('firestore adapter', () => {
 
     afterEach(() => {
         mockConfig.get.mockClear();
+    });
+
+    describe('initializeApp', () => {
+        it('should work if there is no serviceAccount', () => {
+            getServiceAccount.mockReturnValue(null);
+
+            initializeApp();
+
+            expect(admin.initializeApp).toHaveBeenCalledWith();
+        });
+
+        it('should work if there is a serviceAccount', () => {
+            getServiceAccount.mockReturnValue(chance.string());
+
+            initializeApp();
+
+            expect(admin.initializeApp).toHaveBeenCalledWith(expect.any(Object));
+        });
     });
 
     describe('setFirestoreData', () => {
