@@ -1,0 +1,21 @@
+name: PR Verify
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Deploy
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.16.3
+    - name: yarn deploy
+      run: |
+        yarn
+        yarn deploy
