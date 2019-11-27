@@ -1,6 +1,4 @@
 name: Deploy
-  env:
-    FIREBASE_TOKEN: ${{ secrets.firebase_authentication }}
 
 
 on:
@@ -20,6 +18,8 @@ jobs:
       with:
         node-version: 10.16.3
     - name: yarn deploy
+      env:
+        FIREBASE_TOKEN: ${{ secrets.firebase_authentication }}
       run: |
         yarn
         yarn deploy --token "$FIREBASE_TOKEN"
