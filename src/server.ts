@@ -2,7 +2,7 @@ import {https} from 'firebase-functions';
 import {ApolloServer} from 'apollo-server-express';
 import {Express} from 'express';
 
-import schema from './schema/schema';
+import schema from './schema';
 import resolvers from './resolver-map';
 import {initializeApp} from './adapters/firestore-adapter';
 

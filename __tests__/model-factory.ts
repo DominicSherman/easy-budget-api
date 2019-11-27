@@ -12,6 +12,16 @@ export const createRandomVariableCategory = (variableCategory = {}): VariableCat
     ...variableCategory
 });
 
+export const createRandomFixedCategory = (fixedCategory = {}) => ({
+    __typename: 'FixedCategory',
+    amount: chance.natural(),
+    fixedCategoryId: chance.guid(),
+    name: chance.string(),
+    timePeriodId: chance.guid(),
+    userId: chance.string(),
+    ...fixedCategory
+});
+
 export const createRandomExpense = (expense = {}): Expense => ({
     __typename: 'Expense',
     amount: chance.natural(),

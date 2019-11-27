@@ -4,6 +4,7 @@ type TimePeriod {
     beginDate: String!
     endDate: String!
     userId: String!
+    fixedCategories: [FixedCategory!]!
     variableCategories: [VariableCategory!]!
     expenses: [Expense!]!
 }

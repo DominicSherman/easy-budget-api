@@ -1,7 +1,7 @@
 import * as apolloServer from 'apollo-server-express';
 import * as express from 'express';
 
-import schema from '../src/schema/schema';
+import schema from '../src/schema';
 import resolverMap from '../src/resolver-map';
 import {initializeApp} from '../src/adapters/firestore-adapter';
 
