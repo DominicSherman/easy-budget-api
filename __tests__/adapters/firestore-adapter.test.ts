@@ -1,6 +1,7 @@
+import * as admin from 'firebase-admin';
+
 import {getFirestoreData, initializeApp, setFirestoreData} from '../../src/adapters/firestore-adapter';
 import * as serviceAccount from '../../src/get-service-account';
-import * as admin from 'firebase-admin';
 
 const config = require('config');
 const Chance = require('chance');
