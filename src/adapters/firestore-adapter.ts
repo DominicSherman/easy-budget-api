@@ -32,7 +32,7 @@ export const setFirestoreData = (userId: string, collectionName: string, collect
         .doc(userId)
         .collection(collectionName)
         .doc(collectionId)
-        .set(data);
+        .set(data, {merge: true});
 
 export const getFirestoreData = (userId: string, collectionName: string, where?: IWhereObject): Promise<FirebaseFirestore.QuerySnapshot> => {
     if (where) {

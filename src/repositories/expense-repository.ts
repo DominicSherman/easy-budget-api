@@ -1,10 +1,10 @@
-import {CreateExpense, Expense} from '../generated/graphql';
+import {CreateExpense, Expense, UpdateExpense} from '../generated/graphql';
 import {deleteFirestoreData, getFirestoreData, IWhereObject, setFirestoreData} from '../adapters/firestore-adapter';
 import {getDataFromQuerySnapshot} from '../helpers/repository-helpers';
 
 const COLLECTION_NAME = 'expenses';
 
-export const insertExpense = (expenseInput: CreateExpense): Promise<FirebaseFirestore.WriteResult> =>
+export const insertExpense = (expenseInput: CreateExpense | UpdateExpense): Promise<FirebaseFirestore.WriteResult> =>
     setFirestoreData(expenseInput.userId, COLLECTION_NAME, expenseInput.expenseId, expenseInput);
 
 export const deleteExpense = (userId: string, expenseId: string): Promise<FirebaseFirestore.WriteResult> =>
@@ -34,4 +34,15 @@ export const getExpensesByTimePeriodId = (userId: string, timePeriodId: string):
     };
 
     return getExpenses(userId, where);
+};
+
+export const getExpenseByExpenseId = async (userId: string, expenseId: string): Promise<Expense> => {
+    const where: IWhereObject = {
+        field: 'expenseId',
+        operator: '==',
+        value: expenseId
+    };
+    const expenses = await getExpenses(userId, where);
+
+    return expenses[0];
 };

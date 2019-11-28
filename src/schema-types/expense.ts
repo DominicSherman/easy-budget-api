@@ -19,8 +19,11 @@ input CreateExpense {
     name: String
 }
 
-input ExpenseInput {
-    variableCategoryId: String
-    timePeriodId: String
+input UpdateExpense {
+    expenseId: String!
+    userId: String!
+    amount: Float
+    date: String
+    name: String
 }
 `;

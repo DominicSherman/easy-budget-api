@@ -1,10 +1,10 @@
 import {deleteFirestoreData, getFirestoreData, IWhereObject, setFirestoreData} from '../adapters/firestore-adapter';
-import {CreateVariableCategory, VariableCategory} from '../generated/graphql';
+import {CreateVariableCategory, UpdateVariableCategory, VariableCategory} from '../generated/graphql';
 import {getDataFromQuerySnapshot} from '../helpers/repository-helpers';
 
 const COLLECTION_NAME = 'variableCategories';
 
-export const insertVariableCategory = (variableCategoryInput: CreateVariableCategory): Promise<FirebaseFirestore.WriteResult> =>
+export const insertVariableCategory = (variableCategoryInput: CreateVariableCategory | UpdateVariableCategory): Promise<FirebaseFirestore.WriteResult> =>
     setFirestoreData(variableCategoryInput.userId, COLLECTION_NAME, variableCategoryInput.variableCategoryId, variableCategoryInput);
 
 export const deleteVariableCategory = (userId: string, variableCategoryId: string): Promise<FirebaseFirestore.WriteResult> =>
@@ -24,4 +24,15 @@ export const getVariableCategoriesByTimePeriodId = (userId: string, timePeriodId
     };
 
     return getVariableCategories(userId, where);
+};
+
+export const getVariableCategoryByVariableCategoryId = async (userId: string, variableCategoryId: string): Promise<VariableCategory> => {
+    const where: IWhereObject = {
+        field: 'variableCategoryId',
+        operator: '==',
+        value: variableCategoryId
+    };
+    const variableCategories = await getVariableCategories(userId, where);
+
+    return variableCategories[0];
 };

@@ -27,7 +27,7 @@ export type CreateExpense = {
 };
 
 export type CreateFixedCategory = {
-  fixedCategoryId: Scalars['ID'],
+  fixedCategoryId: Scalars['String'],
   timePeriodId: Scalars['String'],
   userId: Scalars['String'],
   amount: Scalars['Int'],
@@ -61,11 +61,6 @@ export type Expense = {
   name?: Maybe<Scalars['String']>,
 };
 
-export type ExpenseInput = {
-  variableCategoryId?: Maybe<Scalars['String']>,
-  timePeriodId?: Maybe<Scalars['String']>,
-};
-
 export type FixedCategory = {
    __typename?: 'FixedCategory',
   fixedCategoryId: Scalars['ID'],
@@ -82,6 +77,12 @@ export type Mutation = {
   createFixedCategory: FixedCategory,
   createTimePeriod: TimePeriod,
   createVariableCategory: VariableCategory,
+  deleteExpense: Scalars['String'],
+  deleteFixedCategory: Scalars['String'],
+  deleteVariableCategory: Scalars['String'],
+  updateExpense: Expense,
+  updateFixedCategory: FixedCategory,
+  updateVariableCategory: VariableCategory,
 };
 
 
@@ -102,6 +103,39 @@ export type MutationCreateTimePeriodArgs = {
 
 export type MutationCreateVariableCategoryArgs = {
   variableCategory: CreateVariableCategory
+};
+
+
+export type MutationDeleteExpenseArgs = {
+  userId: Scalars['String'],
+  expenseId: Scalars['String']
+};
+
+
+export type MutationDeleteFixedCategoryArgs = {
+  userId: Scalars['String'],
+  fixedCategoryId: Scalars['String']
+};
+
+
+export type MutationDeleteVariableCategoryArgs = {
+  userId: Scalars['String'],
+  variableCategoryId: Scalars['String']
+};
+
+
+export type MutationUpdateExpenseArgs = {
+  expense: UpdateExpense
+};
+
+
+export type MutationUpdateFixedCategoryArgs = {
+  fixedCategory: UpdateFixedCategory
+};
+
+
+export type MutationUpdateVariableCategoryArgs = {
+  variableCategory: UpdateVariableCategory
 };
 
 export type Query = {
@@ -147,6 +181,29 @@ export type TimePeriod = {
   fixedCategories: Array<FixedCategory>,
   variableCategories: Array<VariableCategory>,
   expenses: Array<Expense>,
+};
+
+export type UpdateExpense = {
+  expenseId: Scalars['String'],
+  userId: Scalars['String'],
+  amount?: Maybe<Scalars['Float']>,
+  date?: Maybe<Scalars['String']>,
+  name?: Maybe<Scalars['String']>,
+};
+
+export type UpdateFixedCategory = {
+  fixedCategoryId: Scalars['String'],
+  userId: Scalars['String'],
+  amount?: Maybe<Scalars['Int']>,
+  name?: Maybe<Scalars['String']>,
+  paid?: Maybe<Scalars['Boolean']>,
+};
+
+export type UpdateVariableCategory = {
+  variableCategoryId: Scalars['String'],
+  userId: Scalars['String'],
+  amount?: Maybe<Scalars['Int']>,
+  name?: Maybe<Scalars['String']>,
 };
 
 
