@@ -34,6 +34,13 @@ export const setFirestoreData = (userId: string, collectionName: string, collect
         .doc(collectionId)
         .set(data, {merge: true});
 
+export const deleteFirestoreData = (userId: string, collectionName: string, collectionId: string): Promise<FirebaseFirestore.WriteResult> =>
+    db.collection(config.get('rootPath'))
+        .doc(userId)
+        .collection(collectionName)
+        .doc(collectionId)
+        .delete();
+
 export const getFirestoreData = (userId: string, collectionName: string, where?: IWhereObject): Promise<FirebaseFirestore.QuerySnapshot> => {
     if (where) {
         return db.collection(config.get('rootPath'))
@@ -48,10 +55,3 @@ export const getFirestoreData = (userId: string, collectionName: string, where?:
         .collection(collectionName)
         .get();
 };
-
-export const deleteFirestoreData = (userId: string, collectionName: string, collectionId: string): Promise<FirebaseFirestore.WriteResult> =>
-    db.collection(config.get('rootPath'))
-        .doc(userId)
-        .collection(collectionName)
-        .doc(collectionId)
-        .delete();
