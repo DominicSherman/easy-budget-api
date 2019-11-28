@@ -1,8 +1,9 @@
 import * as firestoreAdapter from '../../src/adapters/firestore-adapter';
 import * as repositoryHelpers from '../../src/helpers/repository-helpers';
 import {
+    deleteVariableCategory,
     getVariableCategories,
-    getVariableCategoriesByTimePeriodId,
+    getVariableCategoriesByTimePeriodId, getVariableCategoryByVariableCategoryId,
     insertVariableCategory
 } from '../../src/repositories/variable-category-repository';
 import {createRandomVariableCategory} from '../model-factory';
@@ -15,7 +16,7 @@ jest.mock('../../src/adapters/firestore-adapter');
 jest.mock('../../src/helpers/repository-helpers');
 
 describe('variable category repository', () => {
-    const {getFirestoreData, setFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
+    const {getFirestoreData, setFirestoreData, deleteFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
     const {getDataFromQuerySnapshot} = repositoryHelpers as jest.Mocked<typeof repositoryHelpers>;
 
     let expectedUserId;
@@ -50,6 +51,25 @@ describe('variable category repository', () => {
                 'variableCategories',
                 expectedVariableCategory.variableCategoryId,
                 expectedVariableCategory
+            );
+        });
+    });
+
+    describe('deleteVariableCategory', () => {
+        let expectedVariableCategory;
+
+        beforeEach(() => {
+            expectedVariableCategory = createRandomVariableCategory();
+        });
+
+        it('should call deleteFirestoreData', () => {
+            deleteVariableCategory(expectedVariableCategory.userId, expectedVariableCategory.variableCategoryId);
+
+            expect(deleteFirestoreData).toHaveBeenCalledTimes(1);
+            expect(deleteFirestoreData).toHaveBeenCalledWith(
+                expectedVariableCategory.userId,
+                'variableCategories',
+                expectedVariableCategory.variableCategoryId
             );
         });
     });
@@ -111,6 +131,35 @@ describe('variable category repository', () => {
                 operator: '==',
                 value: expectedTimePeriodId
             });
+        });
+    });
+
+    describe('getVariableCategoryByVariableCategoryId', () => {
+        let expectedVariableCategoryId,
+            expectedVariableCategories;
+
+        beforeEach(() => {
+            expectedVariableCategoryId = chance.guid();
+            expectedVariableCategories = chance.n(createRandomVariableCategory, chance.d6());
+
+            getDataFromQuerySnapshot.mockReturnValue(expectedVariableCategories);
+        });
+
+        it('should call getFirestoreData', async () => {
+            await getVariableCategoryByVariableCategoryId(expectedUserId, expectedVariableCategoryId);
+
+            expect(getFirestoreData).toHaveBeenCalledTimes(1);
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'variableCategories', {
+                field: 'variableCategoryId',
+                operator: '==',
+                value: expectedVariableCategoryId
+            });
+        });
+
+        it('should return the variableCategory', async () => {
+            const actualVariableCategory = await getVariableCategoryByVariableCategoryId(expectedUserId, expectedVariableCategoryId);
+
+            expect(actualVariableCategory).toEqual(expectedVariableCategories[0]);
         });
     });
 });
