@@ -1,11 +1,12 @@
 import {
+    deleteVariableCategory,
     getVariableCategories,
-    getVariableCategoriesByTimePeriodId,
+    getVariableCategoriesByTimePeriodId, getVariableCategoryByVariableCategoryId,
     insertVariableCategory
 } from '../repositories/variable-category-repository';
 import {
     CreateVariableCategory,
-    MutationCreateVariableCategoryArgs,
+    MutationCreateVariableCategoryArgs, MutationDeleteVariableCategoryArgs, MutationUpdateVariableCategoryArgs,
     QueryVariableCategoriesArgs,
     VariableCategory
 } from '../generated/graphql';
@@ -17,6 +18,22 @@ export const createVariableCategoryResolver = async (root: any, args: MutationCr
     await insertVariableCategory(variableCategory);
 
     return variableCategory;
+};
+
+export const updateVariableCategoryResolver = async (root: any, args: MutationUpdateVariableCategoryArgs): Promise<VariableCategory> => {
+    const {variableCategory} = args;
+
+    await insertVariableCategory(variableCategory);
+
+    return getVariableCategoryByVariableCategoryId(variableCategory.userId, variableCategory.variableCategoryId);
+};
+
+export const deleteVariableCategoryResolver = async (root: any, args: MutationDeleteVariableCategoryArgs): Promise<string> => {
+    const {userId, variableCategoryId} = args;
+
+    await deleteVariableCategory(userId, variableCategoryId);
+
+    return variableCategoryId;
 };
 
 export const getVariableCategoriesResolver = (root: any, args: QueryVariableCategoriesArgs): Promise<VariableCategory[]> => {

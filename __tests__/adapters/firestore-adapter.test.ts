@@ -1,6 +1,11 @@
 import * as admin from 'firebase-admin';
 
-import {getFirestoreData, initializeApp, setFirestoreData} from '../../src/adapters/firestore-adapter';
+import {
+    deleteFirestoreData,
+    getFirestoreData,
+    initializeApp,
+    setFirestoreData
+} from '../../src/adapters/firestore-adapter';
 import * as serviceAccount from '../../src/get-service-account';
 
 const config = require('config');
@@ -15,6 +20,7 @@ jest.mock('firebase-admin', () => ({
             doc: jest.fn(() => ({
                 collection: jest.fn(() => ({
                     doc: jest.fn(() => ({
+                        delete: jest.fn(),
                         set: jest.fn()
                     })),
                     get: jest.fn(),
@@ -83,6 +89,25 @@ describe('firestore adapter', () => {
 
         it('should call collection with the rootPath from config', () => {
             setFirestoreData(expectedDoc, expectedCol2, expectedDoc2, expectedData);
+
+            expect(mockConfig.get).toHaveBeenCalledTimes(1);
+            expect(mockConfig.get).toHaveBeenCalledWith('rootPath');
+        });
+    });
+
+    describe('deleteFirestoreData', () => {
+        let expectedDoc,
+            expectedCol2,
+            expectedDoc2;
+
+        beforeEach(() => {
+            expectedDoc = chance.string();
+            expectedCol2 = chance.string();
+            expectedDoc2 = chance.string();
+        });
+
+        it('should call collection with the rootPath from config', () => {
+            deleteFirestoreData(expectedDoc, expectedCol2, expectedDoc2);
 
             expect(mockConfig.get).toHaveBeenCalledTimes(1);
             expect(mockConfig.get).toHaveBeenCalledWith('rootPath');

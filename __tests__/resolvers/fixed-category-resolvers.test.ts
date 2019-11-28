@@ -2,8 +2,8 @@ import {chance} from '../chance';
 import {createRandomFixedCategory} from '../model-factory';
 import * as fixedCategoryRepository from '../../src/repositories/fixed-category-repository';
 import {
-    createFixedCategoryResolver,
-    getFixedCategoriesResolver
+    createFixedCategoryResolver, deleteFixedCategoryResolver,
+    getFixedCategoriesResolver, updateFixedCategoryResolver
 } from '../../src/resolvers/fixed-category-resolvers';
 import * as resolverHelpers from '../../src/helpers/resolver-helpers';
 
@@ -11,7 +11,13 @@ jest.mock('../../src/repositories/fixed-category-repository');
 jest.mock('../../src/helpers/resolver-helpers');
 
 describe('fixed category resolvers', () => {
-    const {getFixedCategoriesByTimePeriodId, getFixedCategories, insertFixedCategory} = fixedCategoryRepository as jest.Mocked<typeof fixedCategoryRepository>;
+    const {
+        getFixedCategoriesByTimePeriodId,
+        getFixedCategories,
+        insertFixedCategory,
+        deleteFixedCategory,
+        getFixedCategoryByFixedCategoryId
+    } = fixedCategoryRepository as jest.Mocked<typeof fixedCategoryRepository>;
     const {getPropertyFromArgsOrRoot} = resolverHelpers as jest.Mocked<typeof resolverHelpers>;
 
     let root,
@@ -24,6 +30,10 @@ describe('fixed category resolvers', () => {
         args = {
             [chance.string()]: chance.string()
         };
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     describe('createFixedCategoryResolver', () => {
@@ -48,6 +58,59 @@ describe('fixed category resolvers', () => {
             const actualResponse = await createFixedCategoryResolver(root, args);
 
             expect(actualResponse).toEqual(expectedCreateFixedCategory);
+        });
+    });
+
+    describe('updateFixedCategoryResolver', () => {
+        let expectedUpdateFixedCategory;
+
+        beforeEach(() => {
+            expectedUpdateFixedCategory = createRandomFixedCategory();
+
+            args = {
+                fixedCategory: expectedUpdateFixedCategory
+            };
+
+            getFixedCategoryByFixedCategoryId.mockReturnValue(expectedUpdateFixedCategory);
+        });
+
+        it('should call insertFixedCategory', async () => {
+            await updateFixedCategoryResolver(root, args);
+
+            expect(insertFixedCategory).toHaveBeenCalledTimes(1);
+            expect(insertFixedCategory).toHaveBeenCalledWith(expectedUpdateFixedCategory);
+        });
+
+        it('should return the input', async () => {
+            const actualResponse = await updateFixedCategoryResolver(root, args);
+
+            expect(actualResponse).toEqual(expectedUpdateFixedCategory);
+        });
+    });
+
+    describe('deleteFixedCategoryResolver', () => {
+        let expectedFixedCategory;
+
+        beforeEach(() => {
+            expectedFixedCategory = createRandomFixedCategory();
+
+            args = {
+                fixedCategoryId: expectedFixedCategory.fixedCategoryId,
+                userId: expectedFixedCategory.userId
+            };
+        });
+
+        it('should call insertFixedCategory', async () => {
+            await deleteFixedCategoryResolver(root, args);
+
+            expect(deleteFixedCategory).toHaveBeenCalledTimes(1);
+            expect(deleteFixedCategory).toHaveBeenCalledWith(expectedFixedCategory.userId, expectedFixedCategory.fixedCategoryId);
+        });
+
+        it('should return the fixedCategory', async () => {
+            const actualResponse = await deleteFixedCategoryResolver(root, args);
+
+            expect(actualResponse).toEqual(expectedFixedCategory.fixedCategoryId);
         });
     });
 

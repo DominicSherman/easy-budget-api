@@ -8,7 +8,7 @@ const {insertVariableCategory} = require('./lib/repositories/variable-category-r
 const {insertFixedCategory} = require('./lib/repositories/fixed-category-repository');
 const {insertExpense} = require('./lib/repositories/expense-repository');
 
-const userId = 'KRrbQtb3Lwc41ispywo5Ci72vow2';
+const userId = '';
 
 const timePeriods = [
     {

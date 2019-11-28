@@ -1,6 +1,7 @@
 import * as firestoreAdapter from '../../src/adapters/firestore-adapter';
 import * as repositoryHelpers from '../../src/helpers/repository-helpers';
 import {
+    deleteExpense, getExpenseByExpenseId,
     getExpenses,
     getExpensesByTimePeriodId,
     getExpensesByVariableCategoryId,
@@ -16,7 +17,7 @@ jest.mock('../../src/adapters/firestore-adapter');
 jest.mock('../../src/helpers/repository-helpers');
 
 describe('expense repository', () => {
-    const {getFirestoreData, setFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
+    const {getFirestoreData, setFirestoreData, deleteFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
     const {getDataFromQuerySnapshot} = repositoryHelpers as jest.Mocked<typeof repositoryHelpers>;
 
     let expectedUserId;
@@ -51,6 +52,31 @@ describe('expense repository', () => {
                 'expenses',
                 expectedExpense.expenseId,
                 expectedExpense
+            );
+        });
+    });
+
+    describe('deleteExpense', () => {
+        let expectedResponse,
+            expectedExpense;
+
+        beforeEach(() => {
+            expectedResponse = {
+                [chance.string()]: chance.string()
+            };
+            expectedExpense = createRandomExpense();
+
+            setFirestoreData.mockReturnValue(expectedResponse);
+        });
+
+        it('should call deleteFirestoreData', () => {
+            deleteExpense(expectedExpense.userId, expectedExpense.expenseId);
+
+            expect(deleteFirestoreData).toHaveBeenCalledTimes(1);
+            expect(deleteFirestoreData).toHaveBeenCalledWith(
+                expectedExpense.userId,
+                'expenses',
+                expectedExpense.expenseId
             );
         });
     });
@@ -131,6 +157,35 @@ describe('expense repository', () => {
                 operator: '==',
                 value: expectedTimePeriodId
             });
+        });
+    });
+
+    describe('getExpenseByExpenseId', () => {
+        let expectedExpenseId,
+            expectedExpenses;
+
+        beforeEach(() => {
+            expectedExpenseId = chance.guid();
+            expectedExpenses = chance.n(createRandomExpense, chance.d6());
+
+            getDataFromQuerySnapshot.mockReturnValue(expectedExpenses);
+        });
+
+        it('should call getFirestoreData', async () => {
+            await getExpenseByExpenseId(expectedUserId, expectedExpenseId);
+
+            expect(getFirestoreData).toHaveBeenCalledTimes(1);
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'expenses', {
+                field: 'expenseId',
+                operator: '==',
+                value: expectedExpenseId
+            });
+        });
+
+        it('should return the expense', async () => {
+            const actualExpense = await getExpenseByExpenseId(expectedUserId, expectedExpenseId);
+
+            expect(actualExpense).toEqual(expectedExpenses[0]);
         });
     });
 });

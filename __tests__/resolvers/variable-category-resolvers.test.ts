@@ -2,8 +2,8 @@ import {chance} from '../chance';
 import {createRandomVariableCategory} from '../model-factory';
 import * as variableCategoryRepository from '../../src/repositories/variable-category-repository';
 import {
-    createVariableCategoryResolver,
-    getVariableCategoriesResolver
+    createVariableCategoryResolver, deleteVariableCategoryResolver,
+    getVariableCategoriesResolver, updateVariableCategoryResolver
 } from '../../src/resolvers/variable-category-resolvers';
 import * as resolverHelpers from '../../src/helpers/resolver-helpers';
 
@@ -11,7 +11,13 @@ jest.mock('../../src/repositories/variable-category-repository');
 jest.mock('../../src/helpers/resolver-helpers');
 
 describe('variable category resolvers', () => {
-    const {getVariableCategoriesByTimePeriodId, getVariableCategories, insertVariableCategory} = variableCategoryRepository as jest.Mocked<typeof variableCategoryRepository>;
+    const {
+        getVariableCategoriesByTimePeriodId,
+        getVariableCategories,
+        insertVariableCategory,
+        getVariableCategoryByVariableCategoryId,
+        deleteVariableCategory
+    } = variableCategoryRepository as jest.Mocked<typeof variableCategoryRepository>;
     const {getPropertyFromArgsOrRoot} = resolverHelpers as jest.Mocked<typeof resolverHelpers>;
 
     let root,
@@ -24,6 +30,10 @@ describe('variable category resolvers', () => {
         args = {
             [chance.string()]: chance.string()
         };
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     describe('createVariableCategoryResolver', () => {
@@ -48,6 +58,59 @@ describe('variable category resolvers', () => {
             const actualResponse = await createVariableCategoryResolver(root, args);
 
             expect(actualResponse).toEqual(expectedCreateVariableCategory);
+        });
+    });
+
+    describe('updateVariableCategoryResolver', () => {
+        let expectedUpdateVariableCategory;
+
+        beforeEach(() => {
+            expectedUpdateVariableCategory = createRandomVariableCategory();
+
+            args = {
+                variableCategory: expectedUpdateVariableCategory
+            };
+
+            getVariableCategoryByVariableCategoryId.mockReturnValue(expectedUpdateVariableCategory);
+        });
+
+        it('should call insertVariableCategory', async () => {
+            await updateVariableCategoryResolver(root, args);
+
+            expect(insertVariableCategory).toHaveBeenCalledTimes(1);
+            expect(insertVariableCategory).toHaveBeenCalledWith(expectedUpdateVariableCategory);
+        });
+
+        it('should return the input', async () => {
+            const actualResponse = await updateVariableCategoryResolver(root, args);
+
+            expect(actualResponse).toEqual(expectedUpdateVariableCategory);
+        });
+    });
+
+    describe('deleteVariableCategoryResolver', () => {
+        let expectedVariableCategory;
+
+        beforeEach(() => {
+            expectedVariableCategory = createRandomVariableCategory();
+
+            args = {
+                userId: expectedVariableCategory.userId,
+                variableCategoryId: expectedVariableCategory.variableCategoryId
+            };
+        });
+
+        it('should call deleteVariableCategory', async () => {
+            await deleteVariableCategoryResolver(root, args);
+
+            expect(deleteVariableCategory).toHaveBeenCalledTimes(1);
+            expect(deleteVariableCategory).toHaveBeenCalledWith(expectedVariableCategory.userId, expectedVariableCategory.variableCategoryId);
+        });
+
+        it('should return the fixedCategoryId', async () => {
+            const actualResponse = await deleteVariableCategoryResolver(root, args);
+
+            expect(actualResponse).toEqual(expectedVariableCategory.variableCategoryId);
         });
     });
 

@@ -9,11 +9,19 @@ type FixedCategory {
 }
 
 input CreateFixedCategory {
-    fixedCategoryId: ID!
+    fixedCategoryId: String!
     timePeriodId: String!
     userId: String!
     amount: Int!
     name: String!
     paid: Boolean!
+}
+
+input UpdateFixedCategory {
+    fixedCategoryId: String!
+    userId: String!
+    amount: Int
+    name: String
+    paid: Boolean
 }
 `;

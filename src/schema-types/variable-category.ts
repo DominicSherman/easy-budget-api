@@ -15,4 +15,11 @@ input CreateVariableCategory {
     amount: Int!
     name: String!
 }
+
+input UpdateVariableCategory {
+    variableCategoryId: String!
+    userId: String!
+    amount: Int
+    name: String
+}
 `;

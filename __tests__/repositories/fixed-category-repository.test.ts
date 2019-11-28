@@ -3,7 +3,8 @@ import * as repositoryHelpers from '../../src/helpers/repository-helpers';
 import {
     getFixedCategories,
     getFixedCategoriesByTimePeriodId,
-    insertFixedCategory
+    insertFixedCategory,
+    deleteFixedCategory, getFixedCategoryByFixedCategoryId
 } from '../../src/repositories/fixed-category-repository';
 import {createRandomFixedCategory} from '../model-factory';
 
@@ -15,7 +16,7 @@ jest.mock('../../src/adapters/firestore-adapter');
 jest.mock('../../src/helpers/repository-helpers');
 
 describe('fixed category repository', () => {
-    const {getFirestoreData, setFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
+    const {getFirestoreData, setFirestoreData, deleteFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
     const {getDataFromQuerySnapshot} = repositoryHelpers as jest.Mocked<typeof repositoryHelpers>;
 
     let expectedUserId;
@@ -50,6 +51,31 @@ describe('fixed category repository', () => {
                 'fixedCategories',
                 expectedFixedCategory.fixedCategoryId,
                 expectedFixedCategory
+            );
+        });
+    });
+
+    describe('deleteFixedCategory', () => {
+        let expectedResponse,
+            expectedFixedCategory;
+
+        beforeEach(() => {
+            expectedResponse = {
+                [chance.string()]: chance.string()
+            };
+            expectedFixedCategory = createRandomFixedCategory();
+
+            setFirestoreData.mockReturnValue(expectedResponse);
+        });
+
+        it('should call setFirestoreData', () => {
+            deleteFixedCategory(expectedFixedCategory.userId, expectedFixedCategory.fixedCategoryId);
+
+            expect(deleteFirestoreData).toHaveBeenCalledTimes(1);
+            expect(deleteFirestoreData).toHaveBeenCalledWith(
+                expectedFixedCategory.userId,
+                'fixedCategories',
+                expectedFixedCategory.fixedCategoryId
             );
         });
     });
@@ -111,6 +137,35 @@ describe('fixed category repository', () => {
                 operator: '==',
                 value: expectedTimePeriodId
             });
+        });
+    });
+
+    describe('getFixedCategoryByFixedCategoryId', () => {
+        let expectedFixedCategoryId,
+            expectedFixedCategories;
+
+        beforeEach(() => {
+            expectedFixedCategoryId = chance.guid();
+            expectedFixedCategories = chance.n(createRandomFixedCategory, chance.d6());
+
+            getDataFromQuerySnapshot.mockReturnValue(expectedFixedCategories);
+        });
+
+        it('should call getFirestoreData', async () => {
+            await getFixedCategoryByFixedCategoryId(expectedUserId, expectedFixedCategoryId);
+
+            expect(getFirestoreData).toHaveBeenCalledTimes(1);
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'fixedCategories', {
+                field: 'fixedCategoryId',
+                operator: '==',
+                value: expectedFixedCategoryId
+            });
+        });
+
+        it('should return the fixedCategory', async () => {
+            const actualFixedCategory = await getFixedCategoryByFixedCategoryId(expectedUserId, expectedFixedCategoryId);
+
+            expect(actualFixedCategory).toEqual(expectedFixedCategories[0]);
         });
     });
 });

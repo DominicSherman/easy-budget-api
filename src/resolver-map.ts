@@ -1,14 +1,35 @@
-import {createVariableCategoryResolver, getVariableCategoriesResolver} from './resolvers/variable-category-resolvers';
-import {createExpenseResolver, getExpensesResolver} from './resolvers/expense-resolvers';
+import {
+    createVariableCategoryResolver,
+    deleteVariableCategoryResolver,
+    getVariableCategoriesResolver,
+    updateVariableCategoryResolver
+} from './resolvers/variable-category-resolvers';
+import {
+    createExpenseResolver,
+    deleteExpenseResolver,
+    getExpensesResolver,
+    updateExpenseResolver
+} from './resolvers/expense-resolvers';
 import {createTimePeriodResolver, getTimePeriodsResolver} from './resolvers/time-period-resolvers';
-import {createFixedCategoryResolver, getFixedCategoriesResolver} from './resolvers/fixed-category-resolvers';
+import {
+    createFixedCategoryResolver,
+    deleteFixedCategoryResolver,
+    getFixedCategoriesResolver,
+    updateFixedCategoryResolver
+} from './resolvers/fixed-category-resolvers';
 
 export default {
     Mutation: {
         createExpense: createExpenseResolver,
         createFixedCategory: createFixedCategoryResolver,
         createTimePeriod: createTimePeriodResolver,
-        createVariableCategory: createVariableCategoryResolver
+        createVariableCategory: createVariableCategoryResolver,
+        deleteExpense: deleteExpenseResolver,
+        deleteFixedCategory: deleteFixedCategoryResolver,
+        deleteVariableCategory: deleteVariableCategoryResolver,
+        updateExpense: updateExpenseResolver,
+        updateFixedCategory: updateFixedCategoryResolver,
+        updateVariableCategory: updateVariableCategoryResolver
     },
     Query: {
         expenses: getExpensesResolver,

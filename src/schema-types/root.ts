@@ -11,5 +11,11 @@ type Mutation {
     createFixedCategory(fixedCategory: CreateFixedCategory!): FixedCategory!
     createTimePeriod(timePeriod: CreateTimePeriod!): TimePeriod!
     createVariableCategory(variableCategory: CreateVariableCategory!): VariableCategory!
+    deleteExpense(userId: String!, expenseId: String!): String!
+    deleteFixedCategory(userId: String!, fixedCategoryId: String!): String!
+    deleteVariableCategory(userId: String!, variableCategoryId: String!): String!
+    updateExpense(expense: UpdateExpense!): Expense!
+    updateFixedCategory(fixedCategory: UpdateFixedCategory!): FixedCategory!
+    updateVariableCategory(variableCategory: UpdateVariableCategory!): VariableCategory!
 }
 `;
