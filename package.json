@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "deploy": "yarn build && NODE_ENV=prod firebase deploy --only functions",
-    "dev": "yarn build && firebase serve --only functions",
+    "dev": "yarn build && NODE_ENV=default firebase serve --only functions",
     "codegen": "graphql-codegen --config codegen.yml",
     "coverage": "jest --coverage",
     "lint": "eslint . --ext .ts",
@@ -25,7 +25,8 @@
     "firebase-admin": "^8.6.0",
     "firebase-functions": "3.3.0",
     "firebase-tools": "7.4.0",
-    "graphql": "^14.5.8"
+    "graphql": "^14.5.8",
+    "node-config-ts": "^3.0.3"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.8.3",
