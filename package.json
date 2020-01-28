@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "deploy": "yarn build && NODE_ENV=prod firebase deploy --only functions",
-    "dev": "yarn build && NODE_ENV=default firebase serve --only functions",
+    "dev": "yarn build && firebase serve --only functions",
     "codegen": "graphql-codegen --config codegen.yml",
     "coverage": "jest --coverage",
     "lint": "eslint . --ext .ts",
