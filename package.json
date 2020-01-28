@@ -6,13 +6,15 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "deploy": "yarn build && NODE_ENV=prod firebase deploy --only functions",
+    "deploy-dev": "yarn build && firebase deploy --only functions:graphqlDev",
+    "deploy-prod": "yarn build && NODE_ENV=prod firebase deploy --only functions:graphql",
     "dev": "yarn build && firebase serve --only functions",
     "codegen": "graphql-codegen --config codegen.yml",
     "coverage": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "test": "yarn lint && yarn coverage",
-    "setup": "yarn build && babel-node --presets es2015 test-data-setup.ts"
+    "setup": "yarn build && babel-node --presets es2015 test-data-setup.ts",
+    "postinstall": "node-config-ts"
   },
   "engines": {
     "node": "10"

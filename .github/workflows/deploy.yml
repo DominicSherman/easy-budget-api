@@ -21,5 +21,5 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.firebase_authentication }}
       run: |
         yarn
-        node-config-ts
-        yarn deploy --token "$FIREBASE_TOKEN"
+        yarn deploy-dev --token "$FIREBASE_TOKEN"
+        yarn deploy-prod --token "$FIREBASE_TOKEN"
