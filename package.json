@@ -12,8 +12,7 @@
     "coverage": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "test": "yarn lint && yarn coverage",
-    "setup": "yarn build && babel-node --presets es2015 test-data-setup.ts",
-    "postinstall": "node-config-ts"
+    "setup": "yarn build && babel-node --presets es2015 test-data-setup.ts"
   },
   "engines": {
     "node": "10"
