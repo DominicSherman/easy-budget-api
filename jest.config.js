@@ -6,7 +6,8 @@ module.exports = {
     coverageDirectory: '.coverage',
     coveragePathIgnorePatterns: [
         '<rootDir>/src/generated/graphql.ts',
-        '<rootDir>/src/get-service-account.ts'
+        '<rootDir>/src/get-service-account.ts',
+        '<rootDir>/src/adapters/firestore-adapter.ts'
     ],
     coverageThreshold: {
         'global': {

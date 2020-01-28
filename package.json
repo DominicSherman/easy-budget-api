@@ -12,7 +12,8 @@
     "coverage": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "test": "yarn lint && yarn coverage",
-    "setup": "yarn build && babel-node --presets es2015 test-data-setup.ts"
+    "setup": "yarn build && babel-node --presets es2015 test-data-setup.ts",
+    "postinstall": "node-config-ts"
   },
   "engines": {
     "node": "10"
@@ -25,7 +26,8 @@
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.2.0",
     "firebase-tools": "7.4.0",
-    "graphql": "^14.5.8"
+    "graphql": "^14.5.8",
+    "node-config-ts": "^3.0.3"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.8.3",

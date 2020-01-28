@@ -71,7 +71,7 @@ module.exports = {
       }
     },
     {
-      files: [ "**/*.test.js", "**/*.test.ts", "**/*.test.tsx" ],
+      files: [ "**/*.test.json", "**/*.test.ts", "**/*.test.tsx" ],
       excludedFiles: [],
       rules: {
         'max-nested-callbacks': 0,
