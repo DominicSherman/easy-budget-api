@@ -1,12 +1,18 @@
 import {chance} from '../chance';
-import {createRandomTimePeriod} from '../model-factory';
+import {createRandomFixedCategory, createRandomTimePeriod, createRandomVariableCategory} from '../model-factory';
 import * as timePeriodRepository from '../../src/repositories/time-period-repository';
 import {createTimePeriodResolver, getTimePeriodsResolver} from '../../src/resolvers/time-period-resolvers';
+import * as variableCategoryRepository from '../../src/repositories/variable-category-repository';
+import * as fixedCategoryRepository from '../../src/repositories/fixed-category-repository';
 
 jest.mock('../../src/repositories/time-period-repository');
+jest.mock('../../src/repositories/variable-category-repository');
+jest.mock('../../src/repositories/fixed-category-repository');
 
 describe('variable category resolvers', () => {
     const {getTimePeriods, insertTimePeriod, getTimePeriodsByDate} = timePeriodRepository as jest.Mocked<typeof timePeriodRepository>;
+    const {getVariableCategoriesByTimePeriodId, insertVariableCategory} = variableCategoryRepository as jest.Mocked<typeof variableCategoryRepository>;
+    const {getFixedCategoriesByTimePeriodId, insertFixedCategory} = fixedCategoryRepository as jest.Mocked<typeof fixedCategoryRepository>;
 
     let root,
         args;
@@ -20,8 +26,16 @@ describe('variable category resolvers', () => {
         };
     });
 
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+
     describe('createTimePeriodResolver', () => {
-        let expectedCreateTimePeriod;
+        let expectedCreateTimePeriod,
+            expectedMostRecentTimePeriod,
+            expectedTimePeriods,
+            expectedPreviousVariableCategories,
+            expectedPreviousFixedCategories;
 
         beforeEach(() => {
             expectedCreateTimePeriod = createRandomTimePeriod();
@@ -29,6 +43,74 @@ describe('variable category resolvers', () => {
             args = {
                 timePeriod: expectedCreateTimePeriod
             };
+
+            expectedMostRecentTimePeriod = createRandomTimePeriod({
+                endDate: expectedCreateTimePeriod.beginDate - 1
+            });
+            expectedTimePeriods = [
+                createRandomTimePeriod({endDate: expectedMostRecentTimePeriod.endDate - 2}),
+                expectedMostRecentTimePeriod,
+                createRandomTimePeriod({endDate: expectedMostRecentTimePeriod.endDate - 1})
+            ];
+            expectedPreviousVariableCategories = chance.n(createRandomVariableCategory, chance.d6());
+            expectedPreviousFixedCategories = chance.n(createRandomFixedCategory, chance.d6());
+
+            getTimePeriods.mockReturnValue(expectedTimePeriods);
+            getVariableCategoriesByTimePeriodId.mockReturnValue(expectedPreviousVariableCategories);
+            getFixedCategoriesByTimePeriodId.mockReturnValue(expectedPreviousFixedCategories);
+        });
+
+        it('should throw an error if begin date is greater than end date for new time period', async () => {
+            expectedCreateTimePeriod.endDate = chance.natural();
+            expectedCreateTimePeriod.beginDate = expectedCreateTimePeriod.endDate + 1;
+            args.timePeriod = expectedCreateTimePeriod;
+
+            await expect(createTimePeriodResolver(root, args)).rejects.toThrow('End date must be after begin date');
+        });
+
+        it('should call getTimePeriod', async () => {
+            await createTimePeriodResolver(root, args);
+
+            expect(getTimePeriods).toHaveBeenCalledTimes(1);
+            expect(getTimePeriods).toHaveBeenCalledWith(expectedCreateTimePeriod.userId);
+        });
+
+        it('should throw an error if mostRecentTimePeriod.endDate is greater than beginDate', async () => {
+            expectedCreateTimePeriod.beginDate = expectedMostRecentTimePeriod.endDate - 1;
+            args.timePeriod = expectedCreateTimePeriod;
+
+            await expect(createTimePeriodResolver(root, args)).rejects.toThrow('Time periods cannot overlap');
+        });
+
+        it('should call insertVariableCategory for all of the previous variable categories', async () => {
+            await createTimePeriodResolver(root, args);
+
+            expect(insertVariableCategory).toHaveBeenCalledTimes(expectedPreviousVariableCategories.length);
+            expectedPreviousVariableCategories.forEach((variableCategory) => {
+                expect(insertVariableCategory).toHaveBeenCalledWith({
+                    amount: variableCategory.amount,
+                    name: variableCategory.name,
+                    timePeriodId: expectedCreateTimePeriod.timePeriodId,
+                    userId: expectedCreateTimePeriod.userId,
+                    variableCategoryId: expect.any(String)
+                });
+            });
+        });
+
+        it('should call insertFixedCategory for all of the previous variable categories', async () => {
+            await createTimePeriodResolver(root, args);
+
+            expect(insertFixedCategory).toHaveBeenCalledTimes(expectedPreviousFixedCategories.length);
+            expectedPreviousFixedCategories.forEach((variableCategory) => {
+                expect(insertFixedCategory).toHaveBeenCalledWith({
+                    amount: variableCategory.amount,
+                    fixedCategoryId: expect.any(String),
+                    name: variableCategory.name,
+                    paid: false,
+                    timePeriodId: expectedCreateTimePeriod.timePeriodId,
+                    userId: expectedCreateTimePeriod.userId
+                });
+            });
         });
 
         it('should call insertTimePeriod', async () => {
