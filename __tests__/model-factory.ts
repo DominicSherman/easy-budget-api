@@ -36,14 +36,19 @@ export const createRandomFixedCategory = (fixedCategory = {}): FixedCategory => 
     ...fixedCategory
 });
 
-export const createRandomTimePeriod = (timePeriod = {}): TimePeriod => ({
-    __typename: 'TimePeriod',
-    beginDate: chance.date().toString(),
-    endDate: chance.date().toString(),
-    expenses: chance.n(createRandomExpense, chance.d6()),
-    fixedCategories: chance.n(createRandomFixedCategory, chance.d6()),
-    timePeriodId: chance.guid(),
-    userId: chance.string(),
-    variableCategories: chance.n(createRandomVariableCategory, chance.d6()),
-    ...timePeriod
-});
+export const createRandomTimePeriod = (timePeriod = {}): TimePeriod => {
+    const beginDate = chance.natural();
+    const endDate = beginDate + chance.natural();
+
+    return {
+        __typename: 'TimePeriod',
+        beginDate,
+        endDate,
+        expenses: chance.n(createRandomExpense, chance.d6()),
+        fixedCategories: chance.n(createRandomFixedCategory, chance.d6()),
+        timePeriodId: chance.guid(),
+        userId: chance.string(),
+        variableCategories: chance.n(createRandomVariableCategory, chance.d6()),
+        ...timePeriod
+    };
+};

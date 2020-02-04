@@ -4,6 +4,5 @@ import {graphqlServer} from './server';
 require = require('esm')(module);
 
 module.exports = {
-    graphql: graphqlServer,
-    graphqlDev: graphqlServer
+    graphql: graphqlServer
 };
