@@ -16,35 +16,36 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
     }
 
     const timePeriods = await getTimePeriods(timePeriod.userId);
-    const sortedTimePeriods = timePeriods.sort((a, b) => a.endDate > b.endDate ? -1 : 1);
-    const mostRecentTimePeriod = sortedTimePeriods[0];
+    let createVariableCategoryPromises = [],
+        createFixedCategoryPromises = [];
 
-    if (mostRecentTimePeriod.endDate > timePeriod.beginDate) {
-        throw new Error('Time periods cannot overlap');
+    if (timePeriods.length) {
+        const sortedTimePeriods = timePeriods.sort((a, b) => a.endDate > b.endDate ? -1 : 1);
+        const mostRecentTimePeriod = sortedTimePeriods[0];
+
+        const previousVariableCategories = await getVariableCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
+        const previousFixedCategories = await getFixedCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
+
+        createVariableCategoryPromises = previousVariableCategories.map((variableCategory) =>
+            insertVariableCategory({
+                amount: variableCategory.amount,
+                name: variableCategory.name,
+                timePeriodId: timePeriod.timePeriodId,
+                userId: timePeriod.userId,
+                variableCategoryId: uuid.v4()
+            })
+        );
+        createFixedCategoryPromises = previousFixedCategories.map((fixedCategory) =>
+            insertFixedCategory({
+                amount: fixedCategory.amount,
+                fixedCategoryId: uuid.v4(),
+                name: fixedCategory.name,
+                paid: false,
+                timePeriodId: timePeriod.timePeriodId,
+                userId: timePeriod.userId
+            })
+        );
     }
-
-    const previousVariableCategories = await getVariableCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
-    const previousFixedCategories = await getFixedCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
-
-    const createVariableCategoryPromises = previousVariableCategories.map((variableCategory) =>
-        insertVariableCategory({
-            amount: variableCategory.amount,
-            name: variableCategory.name,
-            timePeriodId: timePeriod.timePeriodId,
-            userId: timePeriod.userId,
-            variableCategoryId: uuid.v4()
-        })
-    );
-    const createFixedCategoryPromises = previousFixedCategories.map((fixedCategory) =>
-        insertFixedCategory({
-            amount: fixedCategory.amount,
-            fixedCategoryId: uuid.v4(),
-            name: fixedCategory.name,
-            paid: false,
-            timePeriodId: timePeriod.timePeriodId,
-            userId: timePeriod.userId
-        })
-    );
 
     await Promise.all([
         ...createVariableCategoryPromises,

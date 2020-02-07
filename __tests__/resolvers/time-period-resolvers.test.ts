@@ -75,6 +75,15 @@ describe('variable category resolvers', () => {
             expect(getTimePeriods).toHaveBeenCalledWith(expectedCreateTimePeriod.userId);
         });
 
+        it('should not get variable categories or fixed categories if there are not any previous time period', async () => {
+            getTimePeriods.mockResolvedValue([]);
+
+            await createTimePeriodResolver(root, args);
+
+            expect(getVariableCategoriesByTimePeriodId).not.toHaveBeenCalled();
+            expect(getFixedCategoriesByTimePeriodId).not.toHaveBeenCalled();
+        });
+
         it('should throw an error if mostRecentTimePeriod.endDate is greater than beginDate', async () => {
             expectedCreateTimePeriod.beginDate = expectedMostRecentTimePeriod.endDate - 1;
             args.timePeriod = expectedCreateTimePeriod;
