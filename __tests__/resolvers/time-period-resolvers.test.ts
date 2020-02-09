@@ -97,8 +97,7 @@ describe('variable category resolvers', () => {
             expect(insertVariableCategory).toHaveBeenCalledTimes(expectedPreviousVariableCategories.length);
             expectedPreviousVariableCategories.forEach((variableCategory) => {
                 expect(insertVariableCategory).toHaveBeenCalledWith({
-                    amount: variableCategory.amount,
-                    name: variableCategory.name,
+                    ...variableCategory,
                     timePeriodId: expectedCreateTimePeriod.timePeriodId,
                     userId: expectedCreateTimePeriod.userId,
                     variableCategoryId: expect.any(String)
@@ -112,9 +111,8 @@ describe('variable category resolvers', () => {
             expect(insertFixedCategory).toHaveBeenCalledTimes(expectedPreviousFixedCategories.length);
             expectedPreviousFixedCategories.forEach((variableCategory) => {
                 expect(insertFixedCategory).toHaveBeenCalledWith({
-                    amount: variableCategory.amount,
+                    ...variableCategory,
                     fixedCategoryId: expect.any(String),
-                    name: variableCategory.name,
                     paid: false,
                     timePeriodId: expectedCreateTimePeriod.timePeriodId,
                     userId: expectedCreateTimePeriod.userId
