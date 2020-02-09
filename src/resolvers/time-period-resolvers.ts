@@ -23,13 +23,16 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
         const sortedTimePeriods = timePeriods.sort((a, b) => a.endDate > b.endDate ? -1 : 1);
         const mostRecentTimePeriod = sortedTimePeriods[0];
 
+        if (mostRecentTimePeriod.endDate > timePeriod.beginDate) {
+            throw new Error('Time periods cannot overlap');
+        }
+
         const previousVariableCategories = await getVariableCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
         const previousFixedCategories = await getFixedCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
 
         createVariableCategoryPromises = previousVariableCategories.map((variableCategory) =>
             insertVariableCategory({
-                amount: variableCategory.amount,
-                name: variableCategory.name,
+                ...variableCategory,
                 timePeriodId: timePeriod.timePeriodId,
                 userId: timePeriod.userId,
                 variableCategoryId: uuid.v4()
@@ -37,9 +40,8 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
         );
         createFixedCategoryPromises = previousFixedCategories.map((fixedCategory) =>
             insertFixedCategory({
-                amount: fixedCategory.amount,
+                ...fixedCategory,
                 fixedCategoryId: uuid.v4(),
-                name: fixedCategory.name,
                 paid: false,
                 timePeriodId: timePeriod.timePeriodId,
                 userId: timePeriod.userId
