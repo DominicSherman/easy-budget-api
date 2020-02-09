@@ -1,14 +1,17 @@
 import {
     deleteFixedCategory,
     getFixedCategories,
-    getFixedCategoriesByTimePeriodId, getFixedCategoryByFixedCategoryId,
+    getFixedCategoriesByTimePeriodId,
+    getFixedCategoryByFixedCategoryId,
     insertFixedCategory
 } from '../repositories/fixed-category-repository';
 import {getPropertyFromArgsOrRoot} from '../helpers/resolver-helpers';
 import {
     CreateFixedCategory,
     FixedCategory,
-    MutationCreateFixedCategoryArgs, MutationDeleteFixedCategoryArgs, MutationUpdateFixedCategoryArgs,
+    MutationCreateFixedCategoryArgs,
+    MutationDeleteFixedCategoryArgs,
+    MutationUpdateFixedCategoryArgs,
     QueryFixedCategoriesArgs
 } from '../generated/graphql';
 
