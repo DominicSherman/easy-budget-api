@@ -6,6 +6,7 @@ type FixedCategory {
     amount: Int!
     name: String!
     paid: Boolean!
+    note: String
 }
 
 input CreateFixedCategory {
@@ -15,6 +16,7 @@ input CreateFixedCategory {
     amount: Int!
     name: String!
     paid: Boolean!
+    note: String
 }
 
 input UpdateFixedCategory {
@@ -23,5 +25,6 @@ input UpdateFixedCategory {
     amount: Int
     name: String
     paid: Boolean
+    note: String
 }
 `;

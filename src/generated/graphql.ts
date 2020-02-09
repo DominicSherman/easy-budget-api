@@ -6,10 +6,8 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  /** The `Upload` scalar type represents a file upload. */
   Upload: any,
 };
-
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
@@ -33,6 +31,7 @@ export type CreateFixedCategory = {
   amount: Scalars['Int'],
   name: Scalars['String'],
   paid: Scalars['Boolean'],
+  note?: Maybe<Scalars['String']>,
 };
 
 export type CreateTimePeriod = {
@@ -69,6 +68,7 @@ export type FixedCategory = {
   amount: Scalars['Int'],
   name: Scalars['String'],
   paid: Scalars['Boolean'],
+  note?: Maybe<Scalars['String']>,
 };
 
 export type Mutation = {
@@ -197,6 +197,7 @@ export type UpdateFixedCategory = {
   amount?: Maybe<Scalars['Int']>,
   name?: Maybe<Scalars['String']>,
   paid?: Maybe<Scalars['Boolean']>,
+  note?: Maybe<Scalars['String']>,
 };
 
 export type UpdateVariableCategory = {
