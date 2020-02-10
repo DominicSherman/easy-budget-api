@@ -7,7 +7,7 @@ import {
 import {
     CreateVariableCategory,
     MutationCreateVariableCategoryArgs, MutationDeleteVariableCategoryArgs, MutationUpdateVariableCategoryArgs,
-    QueryVariableCategoriesArgs,
+    QueryVariableCategoriesArgs, QueryVariableCategoryArgs,
     VariableCategory
 } from '../generated/graphql';
 import {getPropertyFromArgsOrRoot} from '../helpers/resolver-helpers';
@@ -45,4 +45,11 @@ export const getVariableCategoriesResolver = (root: any, args: QueryVariableCate
     }
 
     return getVariableCategories(userId);
+};
+
+export const getVariableCategoryResolver = (root: any, args: QueryVariableCategoryArgs): Promise<VariableCategory> => {
+    const userId = getPropertyFromArgsOrRoot(root, args, 'userId');
+    const variableCategoryId = getPropertyFromArgsOrRoot(root, args, 'variableCategoryId');
+
+    return getVariableCategoryByVariableCategoryId(userId, variableCategoryId);
 };

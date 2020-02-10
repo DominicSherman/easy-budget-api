@@ -7,6 +7,7 @@ type Expense {
     amount: Float!
     date: String!
     name: String
+    variableCategory: VariableCategory!
 }
 
 input CreateExpense {

@@ -12,7 +12,7 @@ import {
     MutationCreateFixedCategoryArgs,
     MutationDeleteFixedCategoryArgs,
     MutationUpdateFixedCategoryArgs,
-    QueryFixedCategoriesArgs
+    QueryFixedCategoriesArgs, QueryFixedCategoryArgs
 } from '../generated/graphql';
 
 export const createFixedCategoryResolver = async (root: any, args: MutationCreateFixedCategoryArgs): Promise<CreateFixedCategory> => {
@@ -48,4 +48,11 @@ export const getFixedCategoriesResolver = (root: any, args: QueryFixedCategories
     }
 
     return getFixedCategories(userId);
+};
+
+export const getFixedCategoryResolver = (root: any, args: QueryFixedCategoryArgs): Promise<FixedCategory> => {
+    const userId = getPropertyFromArgsOrRoot(root, args, 'userId');
+    const fixedCategoryId = getPropertyFromArgsOrRoot(root, args, 'fixedCategoryId');
+
+    return getFixedCategoryByFixedCategoryId(userId, fixedCategoryId);
 };

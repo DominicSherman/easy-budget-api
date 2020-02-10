@@ -2,6 +2,8 @@ import {Expense, FixedCategory, TimePeriod, VariableCategory} from '../src/gener
 
 import {chance} from './chance';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 export const createRandomExpense = (expense = {}): Expense => ({
     __typename: 'Expense',
     amount: chance.natural(),

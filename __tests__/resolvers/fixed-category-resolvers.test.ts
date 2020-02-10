@@ -3,7 +3,7 @@ import {createRandomFixedCategory} from '../model-factory';
 import * as fixedCategoryRepository from '../../src/repositories/fixed-category-repository';
 import {
     createFixedCategoryResolver, deleteFixedCategoryResolver,
-    getFixedCategoriesResolver, updateFixedCategoryResolver
+    getFixedCategoriesResolver, getFixedCategoryResolver, updateFixedCategoryResolver
 } from '../../src/resolvers/fixed-category-resolvers';
 import * as resolverHelpers from '../../src/helpers/resolver-helpers';
 
@@ -114,7 +114,7 @@ describe('fixed category resolvers', () => {
         });
     });
 
-    describe('getFixedCategoryResolver', () => {
+    describe('getFixedCategoriesResolver', () => {
         let expectedFixedCategories,
             expectedUserId,
             expectedTimePeriodId;
@@ -168,6 +168,35 @@ describe('fixed category resolvers', () => {
 
                 expect(actualFixedCategories).toEqual(expectedFixedCategories);
             });
+        });
+    });
+
+    describe('getFixedCategoryResolver', () => {
+        let expectedFixedCategories,
+            expectedUserId,
+            expectedFixedCategoryId;
+
+        beforeEach(() => {
+            expectedFixedCategories = chance.n(createRandomFixedCategory, chance.d6());
+            expectedUserId = chance.guid();
+            expectedFixedCategoryId = chance.guid();
+
+            getFixedCategoryByFixedCategoryId.mockReturnValue(expectedFixedCategories);
+
+            getPropertyFromArgsOrRoot
+                .mockReturnValueOnce(expectedUserId)
+                .mockReturnValueOnce(expectedFixedCategoryId);
+        });
+
+        it('should call getFixedCategoryByFixedCategoryId', () => {
+            const actualValue = getFixedCategoryResolver(root, args);
+
+            expect(getPropertyFromArgsOrRoot).toHaveBeenCalledTimes(2);
+            expect(getPropertyFromArgsOrRoot).toHaveBeenCalledWith(root, args, 'userId');
+            expect(getPropertyFromArgsOrRoot).toHaveBeenCalledWith(root, args, 'fixedCategoryId');
+            expect(getFixedCategoryByFixedCategoryId).toHaveBeenCalledTimes(1);
+            expect(getFixedCategoryByFixedCategoryId).toHaveBeenCalledWith(expectedUserId, expectedFixedCategoryId);
+            expect(actualValue).toEqual(expectedFixedCategories);
         });
     });
 });
