@@ -10,6 +10,8 @@ export const createRandomExpense = (expense = {}): Expense => ({
     name: chance.string(),
     timePeriodId: chance.guid(),
     userId: chance.string(),
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    variableCategory: createRandomVariableCategory(),
     variableCategoryId: chance.guid(),
     ...expense
 });
