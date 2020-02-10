@@ -3,7 +3,7 @@ import {createRandomVariableCategory} from '../model-factory';
 import * as variableCategoryRepository from '../../src/repositories/variable-category-repository';
 import {
     createVariableCategoryResolver, deleteVariableCategoryResolver,
-    getVariableCategoriesResolver, updateVariableCategoryResolver
+    getVariableCategoriesResolver, getVariableCategoryResolver, updateVariableCategoryResolver
 } from '../../src/resolvers/variable-category-resolvers';
 import * as resolverHelpers from '../../src/helpers/resolver-helpers';
 
@@ -114,7 +114,7 @@ describe('variable category resolvers', () => {
         });
     });
 
-    describe('getVariableCategoryResolver', () => {
+    describe('getVariableCategoriesResolver', () => {
         let expectedVariableCategories,
             expectedUserId,
             expectedTimePeriodId;
@@ -168,6 +168,37 @@ describe('variable category resolvers', () => {
 
                 expect(actualVariableCategories).toEqual(expectedVariableCategories);
             });
+        });
+    });
+
+    describe('getVariableCategoryResolver', () => {
+        let expectedVariableCategories,
+            expectedUserId,
+            expectedVariableCategoryId;
+
+        beforeEach(() => {
+            expectedVariableCategories = chance.n(createRandomVariableCategory, chance.d6());
+            expectedUserId = chance.guid();
+            expectedVariableCategoryId = chance.guid();
+
+            getVariableCategoryByVariableCategoryId.mockReturnValue(expectedVariableCategories);
+
+            getPropertyFromArgsOrRoot
+                .mockReturnValueOnce(expectedUserId)
+                .mockReturnValueOnce(expectedVariableCategoryId);
+        });
+
+        it('should call getVariableCategoriesByTimePeriodId', async () => {
+            await getVariableCategoryResolver(root, args);
+
+            expect(getVariableCategoryByVariableCategoryId).toHaveBeenCalledTimes(1);
+            expect(getVariableCategoryByVariableCategoryId).toHaveBeenCalledWith(expectedUserId, expectedVariableCategoryId);
+        });
+
+        it('should return the variable categories', async () => {
+            const actualVariableCategories = await getVariableCategoryResolver(root, args);
+
+            expect(actualVariableCategories).toEqual(expectedVariableCategories);
         });
     });
 });
