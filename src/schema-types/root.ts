@@ -1,8 +1,11 @@
 export const root = `
 type Query {
     expenses(userId: String!, variableCategoryId: String, timePeriodId: String): [Expense!]!
-    fixedCategories(userId: String!, fixedCategoryId: String, timePeriodId: String): [FixedCategory!]!
+    fixedCategory(userId: String!, fixedCategoryId: String!): FixedCategory!
+    fixedCategories(userId: String!, timePeriodId: String): [FixedCategory!]!
+    timePeriod(userId: String!, timePeriodId: String!): TimePeriod!
     timePeriods(userId: String!, date: String): [TimePeriod!]!
+    variableCategory(userId: String!, variableCategoryId: String!): VariableCategory!
     variableCategories(userId: String!, timePeriodId: String): [VariableCategory!]!
 }
 

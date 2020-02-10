@@ -1,7 +1,7 @@
 import {
     createVariableCategoryResolver,
     deleteVariableCategoryResolver,
-    getVariableCategoriesResolver,
+    getVariableCategoriesResolver, getVariableCategoryResolver,
     updateVariableCategoryResolver
 } from './resolvers/variable-category-resolvers';
 import {
@@ -14,7 +14,7 @@ import {createTimePeriodResolver, getTimePeriodsResolver} from './resolvers/time
 import {
     createFixedCategoryResolver,
     deleteFixedCategoryResolver,
-    getFixedCategoriesResolver,
+    getFixedCategoriesResolver, getFixedCategoryResolver,
     updateFixedCategoryResolver
 } from './resolvers/fixed-category-resolvers';
 
@@ -34,8 +34,10 @@ export default {
     Query: {
         expenses: getExpensesResolver,
         fixedCategories: getFixedCategoriesResolver,
+        fixedCategory: getFixedCategoryResolver,
         timePeriods: getTimePeriodsResolver,
-        variableCategories: getVariableCategoriesResolver
+        variableCategories: getVariableCategoriesResolver,
+        variableCategory: getVariableCategoryResolver
     },
     TimePeriod: {
         expenses: getExpensesResolver,

@@ -58,6 +58,7 @@ export type Expense = {
   amount: Scalars['Float'],
   date: Scalars['String'],
   name?: Maybe<Scalars['String']>,
+  variableCategory: VariableCategory,
 };
 
 export type FixedCategory = {
@@ -141,8 +142,11 @@ export type MutationUpdateVariableCategoryArgs = {
 export type Query = {
    __typename?: 'Query',
   expenses: Array<Expense>,
+  fixedCategory: FixedCategory,
   fixedCategories: Array<FixedCategory>,
+  timePeriod: TimePeriod,
   timePeriods: Array<TimePeriod>,
+  variableCategory: VariableCategory,
   variableCategories: Array<VariableCategory>,
 };
 
@@ -154,16 +158,33 @@ export type QueryExpensesArgs = {
 };
 
 
+export type QueryFixedCategoryArgs = {
+  userId: Scalars['String'],
+  fixedCategoryId: Scalars['String']
+};
+
+
 export type QueryFixedCategoriesArgs = {
   userId: Scalars['String'],
-  fixedCategoryId?: Maybe<Scalars['String']>,
   timePeriodId?: Maybe<Scalars['String']>
+};
+
+
+export type QueryTimePeriodArgs = {
+  userId: Scalars['String'],
+  timePeriodId: Scalars['String']
 };
 
 
 export type QueryTimePeriodsArgs = {
   userId: Scalars['String'],
   date?: Maybe<Scalars['String']>
+};
+
+
+export type QueryVariableCategoryArgs = {
+  userId: Scalars['String'],
+  variableCategoryId: Scalars['String']
 };
 
 
