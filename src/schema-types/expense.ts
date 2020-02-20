@@ -26,5 +26,6 @@ input UpdateExpense {
     amount: Float
     date: String
     name: String
+    variableCategoryId: String
 }
 `;

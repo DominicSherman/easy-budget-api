@@ -217,6 +217,7 @@ export type UpdateExpense = {
   amount?: Maybe<Scalars['Float']>,
   date?: Maybe<Scalars['String']>,
   name?: Maybe<Scalars['String']>,
+  variableCategoryId?: Maybe<Scalars['String']>,
 };
 
 export type UpdateFixedCategory = {
