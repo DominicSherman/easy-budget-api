@@ -4,6 +4,7 @@ import * as expenseRepository from '../../src/repositories/expense-repository';
 import {
     createExpenseResolver,
     deleteExpenseResolver,
+    getExpenseResolver,
     getExpensesResolver,
     updateExpenseResolver
 } from '../../src/resolvers/expense-resolvers';
@@ -198,6 +199,37 @@ describe('variable category resolvers', () => {
 
                 expect(actualExpenses).toEqual(expectedExpenses);
             });
+        });
+    });
+
+    describe('getExpenseResolver', () => {
+        let expectedExpense,
+            expectedUserId,
+            expectedExpenseId;
+
+        beforeEach(() => {
+            expectedExpense = createRandomExpense();
+            expectedUserId = chance.guid();
+            expectedExpenseId = chance.guid();
+
+            getExpenses.mockReturnValue(expectedExpense);
+
+            getPropertyFromArgsOrRoot
+                .mockReturnValueOnce(expectedUserId)
+                .mockReturnValueOnce(expectedExpenseId);
+        });
+
+        it('should call getExpenseByExpenseId', async () => {
+            await getExpenseResolver(root, args);
+
+            expect(getExpenseByExpenseId).toHaveBeenCalledTimes(1);
+            expect(getExpenseByExpenseId).toHaveBeenCalledWith(expectedUserId, expectedExpenseId);
+        });
+
+        it('should return the expenses', async () => {
+            const actualResponse = await getExpenseResolver(root, args);
+
+            expect(actualResponse).toEqual(expectedExpense);
         });
     });
 });

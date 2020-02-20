@@ -1,5 +1,6 @@
 export const root = `
 type Query {
+    expense(userId: String!, expenseId: String!): Expense!
     expenses(userId: String!, variableCategoryId: String, timePeriodId: String): [Expense!]!
     fixedCategory(userId: String!, fixedCategoryId: String!): FixedCategory!
     fixedCategories(userId: String!, timePeriodId: String): [FixedCategory!]!

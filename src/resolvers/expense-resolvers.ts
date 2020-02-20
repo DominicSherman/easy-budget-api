@@ -1,13 +1,16 @@
 import {
     CreateExpense,
     Expense,
-    MutationCreateExpenseArgs, MutationDeleteExpenseArgs,
+    MutationCreateExpenseArgs,
+    MutationDeleteExpenseArgs,
     MutationUpdateExpenseArgs,
+    QueryExpenseArgs,
     QueryExpensesArgs
 } from '../generated/graphql';
 import {getPropertyFromArgsOrRoot} from '../helpers/resolver-helpers';
 import {
-    deleteExpense, getExpenseByExpenseId,
+    deleteExpense,
+    getExpenseByExpenseId,
     getExpenses,
     getExpensesByTimePeriodId,
     getExpensesByVariableCategoryId,
@@ -52,4 +55,11 @@ export const getExpensesResolver = (root: any, args: QueryExpensesArgs): Promise
     }
 
     return getExpenses(userId);
+};
+
+export const getExpenseResolver = (root, args: QueryExpenseArgs): Promise<Expense> => {
+    const userId = getPropertyFromArgsOrRoot(root, args, 'userId');
+    const expenseId = getPropertyFromArgsOrRoot(root, args, 'expenseId');
+
+    return getExpenseByExpenseId(userId, expenseId);
 };

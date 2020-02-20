@@ -141,6 +141,7 @@ export type MutationUpdateVariableCategoryArgs = {
 
 export type Query = {
    __typename?: 'Query',
+  expense: Expense,
   expenses: Array<Expense>,
   fixedCategory: FixedCategory,
   fixedCategories: Array<FixedCategory>,
@@ -148,6 +149,12 @@ export type Query = {
   timePeriods: Array<TimePeriod>,
   variableCategory: VariableCategory,
   variableCategories: Array<VariableCategory>,
+};
+
+
+export type QueryExpenseArgs = {
+  userId: Scalars['String'],
+  expenseId: Scalars['String']
 };
 
 

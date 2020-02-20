@@ -6,7 +6,7 @@ import {
 } from './resolvers/variable-category-resolvers';
 import {
     createExpenseResolver,
-    deleteExpenseResolver,
+    deleteExpenseResolver, getExpenseResolver,
     getExpensesResolver,
     updateExpenseResolver
 } from './resolvers/expense-resolvers';
@@ -32,6 +32,7 @@ export default {
         updateVariableCategory: updateVariableCategoryResolver
     },
     Query: {
+        expense: getExpenseResolver,
         expenses: getExpensesResolver,
         fixedCategories: getFixedCategoriesResolver,
         fixedCategory: getFixedCategoryResolver,
