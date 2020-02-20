@@ -212,7 +212,7 @@ describe('variable category resolvers', () => {
             expectedUserId = chance.guid();
             expectedExpenseId = chance.guid();
 
-            getExpenses.mockReturnValue(expectedExpense);
+            getExpenseByExpenseId.mockReturnValue(expectedExpense);
 
             getPropertyFromArgsOrRoot
                 .mockReturnValueOnce(expectedUserId)
