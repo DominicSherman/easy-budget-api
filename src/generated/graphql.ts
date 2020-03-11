@@ -6,8 +6,10 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any,
 };
+
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
@@ -32,6 +34,21 @@ export type CreateFixedCategory = {
   name: Scalars['String'],
   paid: Scalars['Boolean'],
   note?: Maybe<Scalars['String']>,
+};
+
+export type CreateSaving = {
+  savingId: Scalars['String'],
+  userId: Scalars['String'],
+  savingCategoryId: Scalars['String'],
+  amount: Scalars['Float'],
+  date: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
+};
+
+export type CreateSavingCategory = {
+  savingCategoryId: Scalars['String'],
+  userId: Scalars['String'],
+  name: Scalars['String'],
 };
 
 export type CreateTimePeriod = {
@@ -76,13 +93,19 @@ export type Mutation = {
    __typename?: 'Mutation',
   createExpense: Expense,
   createFixedCategory: FixedCategory,
+  createSaving: Saving,
+  createSavingCategory: SavingCategory,
   createTimePeriod: TimePeriod,
   createVariableCategory: VariableCategory,
   deleteExpense: Scalars['String'],
   deleteFixedCategory: Scalars['String'],
+  deleteSaving: Scalars['String'],
+  deleteSavingCategory: Scalars['String'],
   deleteVariableCategory: Scalars['String'],
   updateExpense: Expense,
   updateFixedCategory: FixedCategory,
+  updateSaving: Saving,
+  updateSavingCategory: SavingCategory,
   updateVariableCategory: VariableCategory,
 };
 
@@ -94,6 +117,16 @@ export type MutationCreateExpenseArgs = {
 
 export type MutationCreateFixedCategoryArgs = {
   fixedCategory: CreateFixedCategory
+};
+
+
+export type MutationCreateSavingArgs = {
+  saving: CreateSaving
+};
+
+
+export type MutationCreateSavingCategoryArgs = {
+  savingCategory: CreateSavingCategory
 };
 
 
@@ -119,6 +152,18 @@ export type MutationDeleteFixedCategoryArgs = {
 };
 
 
+export type MutationDeleteSavingArgs = {
+  userId: Scalars['String'],
+  savingId: Scalars['String']
+};
+
+
+export type MutationDeleteSavingCategoryArgs = {
+  userId: Scalars['String'],
+  savingCategoryId: Scalars['String']
+};
+
+
 export type MutationDeleteVariableCategoryArgs = {
   userId: Scalars['String'],
   variableCategoryId: Scalars['String']
@@ -135,6 +180,16 @@ export type MutationUpdateFixedCategoryArgs = {
 };
 
 
+export type MutationUpdateSavingArgs = {
+  saving: UpdateSaving
+};
+
+
+export type MutationUpdateSavingCategoryArgs = {
+  savingCategory: UpdateSavingCategory
+};
+
+
 export type MutationUpdateVariableCategoryArgs = {
   variableCategory: UpdateVariableCategory
 };
@@ -143,12 +198,16 @@ export type Query = {
    __typename?: 'Query',
   expense: Expense,
   expenses: Array<Expense>,
-  fixedCategory: FixedCategory,
   fixedCategories: Array<FixedCategory>,
+  fixedCategory: FixedCategory,
+  saving: Saving,
+  savingCategories: Array<SavingCategory>,
+  savingCategory: SavingCategory,
+  savings: Array<Saving>,
   timePeriod: TimePeriod,
   timePeriods: Array<TimePeriod>,
-  variableCategory: VariableCategory,
   variableCategories: Array<VariableCategory>,
+  variableCategory: VariableCategory,
 };
 
 
@@ -165,15 +224,38 @@ export type QueryExpensesArgs = {
 };
 
 
+export type QueryFixedCategoriesArgs = {
+  userId: Scalars['String'],
+  timePeriodId?: Maybe<Scalars['String']>
+};
+
+
 export type QueryFixedCategoryArgs = {
   userId: Scalars['String'],
   fixedCategoryId: Scalars['String']
 };
 
 
-export type QueryFixedCategoriesArgs = {
+export type QuerySavingArgs = {
   userId: Scalars['String'],
-  timePeriodId?: Maybe<Scalars['String']>
+  savingId: Scalars['String']
+};
+
+
+export type QuerySavingCategoriesArgs = {
+  userId: Scalars['String']
+};
+
+
+export type QuerySavingCategoryArgs = {
+  userId: Scalars['String'],
+  savingCategoryId: Scalars['String']
+};
+
+
+export type QuerySavingsArgs = {
+  userId: Scalars['String'],
+  savingCategoryId: Scalars['String']
 };
 
 
@@ -189,15 +271,34 @@ export type QueryTimePeriodsArgs = {
 };
 
 
+export type QueryVariableCategoriesArgs = {
+  userId: Scalars['String'],
+  timePeriodId?: Maybe<Scalars['String']>
+};
+
+
 export type QueryVariableCategoryArgs = {
   userId: Scalars['String'],
   variableCategoryId: Scalars['String']
 };
 
-
-export type QueryVariableCategoriesArgs = {
+export type Saving = {
+   __typename?: 'Saving',
+  savingId: Scalars['ID'],
   userId: Scalars['String'],
-  timePeriodId?: Maybe<Scalars['String']>
+  savingCategoryId: Scalars['String'],
+  amount: Scalars['Float'],
+  date: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
+  saving: SavingCategory,
+};
+
+export type SavingCategory = {
+   __typename?: 'SavingCategory',
+  savingCategoryId: Scalars['ID'],
+  userId: Scalars['String'],
+  name: Scalars['String'],
+  savings: Array<Saving>,
 };
 
 export type TimePeriod = {
@@ -227,6 +328,21 @@ export type UpdateFixedCategory = {
   name?: Maybe<Scalars['String']>,
   paid?: Maybe<Scalars['Boolean']>,
   note?: Maybe<Scalars['String']>,
+};
+
+export type UpdateSaving = {
+  savingId: Scalars['String'],
+  userId: Scalars['String'],
+  savingCategoryId?: Maybe<Scalars['String']>,
+  amount?: Maybe<Scalars['Float']>,
+  date?: Maybe<Scalars['String']>,
+  name?: Maybe<Scalars['String']>,
+};
+
+export type UpdateSavingCategory = {
+  savingCategoryId: Scalars['String'],
+  userId: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type UpdateVariableCategory = {
