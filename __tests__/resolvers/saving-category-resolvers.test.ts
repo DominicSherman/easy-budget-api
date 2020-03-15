@@ -53,7 +53,10 @@ describe('saving category resolvers', () => {
             await createSavingCategoryResolver(root, args);
 
             expect(insertSavingCategory).toHaveBeenCalledTimes(1);
-            expect(insertSavingCategory).toHaveBeenCalledWith(expectedCreateSavingCategory);
+            expect(insertSavingCategory).toHaveBeenCalledWith({
+                ...expectedCreateSavingCategory,
+                amount: 0
+            });
         });
 
         it('should return the input', async () => {

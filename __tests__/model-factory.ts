@@ -1,4 +1,4 @@
-import {Expense, FixedCategory, Saving, SavingCategory, TimePeriod, VariableCategory} from '../src/generated/graphql';
+import {Expense, FixedCategory, SavingCategory, TimePeriod, VariableCategory} from '../src/generated/graphql';
 
 import {chance} from './chance';
 
@@ -16,24 +16,11 @@ export const createRandomExpense = (expense = {}): Expense => ({
     ...expense
 });
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-export const createRandomSaving = (saving = {}): Saving => ({
-    __typename: 'Saving',
-    amount: chance.natural(),
-    date: chance.date().toString(),
-    name: chance.string(),
-    savingCategoryId: chance.guid(),
-    savingId: chance.guid(),
-    userId: chance.string(),
-    ...saving
-});
-
 export const createRandomSavingCategory = (savingCategory = {}): SavingCategory => ({
     __typename: 'SavingCategory',
+    amount: chance.natural(),
     name: chance.string(),
     savingCategoryId: chance.guid(),
-    savings: chance.n(createRandomSaving, chance.d6()),
     userId: chance.string(),
     ...savingCategory
 });
