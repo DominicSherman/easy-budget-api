@@ -21,12 +21,6 @@ import {
     updateFixedCategoryResolver
 } from './resolvers/fixed-category-resolvers';
 import {
-    createSavingResolver,
-    deleteSavingResolver,
-    getSavingResolver,
-    getSavingsResolver, updateSavingResolver
-} from './resolvers/saving-resolvers';
-import {
     createSavingCategoryResolver, deleteSavingCategoryResolver,
     getSavingCategoriesResolver,
     getSavingCategoryResolver, updateSavingCategoryResolver
@@ -36,18 +30,15 @@ export default {
     Mutation: {
         createExpense: createExpenseResolver,
         createFixedCategory: createFixedCategoryResolver,
-        createSaving: createSavingResolver,
         createSavingCategory: createSavingCategoryResolver,
         createTimePeriod: createTimePeriodResolver,
         createVariableCategory: createVariableCategoryResolver,
         deleteExpense: deleteExpenseResolver,
         deleteFixedCategory: deleteFixedCategoryResolver,
-        deleteSaving: deleteSavingResolver,
         deleteSavingCategory: deleteSavingCategoryResolver,
         deleteVariableCategory: deleteVariableCategoryResolver,
         updateExpense: updateExpenseResolver,
         updateFixedCategory: updateFixedCategoryResolver,
-        updateSaving: updateSavingResolver,
         updateSavingCategory: updateSavingCategoryResolver,
         updateVariableCategory: updateVariableCategoryResolver
     },
@@ -56,16 +47,11 @@ export default {
         expenses: getExpensesResolver,
         fixedCategories: getFixedCategoriesResolver,
         fixedCategory: getFixedCategoryResolver,
-        saving: getSavingResolver,
         savingCategories: getSavingCategoriesResolver,
         savingCategory: getSavingCategoryResolver,
-        savings: getSavingsResolver,
         timePeriods: getTimePeriodsResolver,
         variableCategories: getVariableCategoriesResolver,
         variableCategory: getVariableCategoryResolver
-    },
-    SavingCategory: {
-        savings: getSavingsResolver
     },
     TimePeriod: {
         expenses: getExpensesResolver,
