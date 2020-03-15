@@ -3,7 +3,7 @@ type SavingCategory {
     savingCategoryId: ID!
     userId: String!
     name: String!
-    savings: [Saving!]!
+    amount: Int!
 }
 
 input CreateSavingCategory {
@@ -16,5 +16,6 @@ input UpdateSavingCategory {
     savingCategoryId: String!
     userId: String!
     name: String
+    amount: Int
 }
 `;
