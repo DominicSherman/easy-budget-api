@@ -15,7 +15,10 @@ import {getPropertyFromArgsOrRoot} from '../helpers/resolver-helpers';
 export const createSavingCategoryResolver = async (root: any, args: MutationCreateSavingCategoryArgs): Promise<CreateSavingCategory> => {
     const {savingCategory} = args;
 
-    await insertSavingCategory(savingCategory);
+    await insertSavingCategory({
+        ...savingCategory,
+        amount: 0
+    });
 
     return savingCategory;
 };
