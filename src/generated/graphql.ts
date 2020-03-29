@@ -6,8 +6,10 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any,
 };
+
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
@@ -32,6 +34,15 @@ export type CreateFixedCategory = {
   name: Scalars['String'],
   paid: Scalars['Boolean'],
   note?: Maybe<Scalars['String']>,
+};
+
+export type CreateIncomeItem = {
+  incomeItemId: Scalars['ID'],
+  timePeriodId: Scalars['String'],
+  userId: Scalars['String'],
+  amount: Scalars['Int'],
+  recurring: Scalars['Boolean'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type CreateSavingCategory = {
@@ -78,19 +89,32 @@ export type FixedCategory = {
   note?: Maybe<Scalars['String']>,
 };
 
+export type IncomeItem = {
+   __typename?: 'IncomeItem',
+  incomeItemId: Scalars['ID'],
+  timePeriodId: Scalars['String'],
+  userId: Scalars['String'],
+  amount: Scalars['Int'],
+  recurring: Scalars['Boolean'],
+  name?: Maybe<Scalars['String']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   createExpense: Expense,
   createFixedCategory: FixedCategory,
+  createIncomeItem: IncomeItem,
   createSavingCategory: SavingCategory,
   createTimePeriod: TimePeriod,
   createVariableCategory: VariableCategory,
   deleteExpense: Scalars['String'],
   deleteFixedCategory: Scalars['String'],
+  deleteIncomeItem: Scalars['String'],
   deleteSavingCategory: Scalars['String'],
   deleteVariableCategory: Scalars['String'],
   updateExpense: Expense,
   updateFixedCategory: FixedCategory,
+  updateIncomeItem: IncomeItem,
   updateSavingCategory: SavingCategory,
   updateVariableCategory: VariableCategory,
 };
@@ -103,6 +127,11 @@ export type MutationCreateExpenseArgs = {
 
 export type MutationCreateFixedCategoryArgs = {
   fixedCategory: CreateFixedCategory
+};
+
+
+export type MutationCreateIncomeItemArgs = {
+  incomeItem: CreateIncomeItem
 };
 
 
@@ -133,6 +162,12 @@ export type MutationDeleteFixedCategoryArgs = {
 };
 
 
+export type MutationDeleteIncomeItemArgs = {
+  userId: Scalars['String'],
+  incomeItemId: Scalars['String']
+};
+
+
 export type MutationDeleteSavingCategoryArgs = {
   userId: Scalars['String'],
   savingCategoryId: Scalars['String']
@@ -155,6 +190,11 @@ export type MutationUpdateFixedCategoryArgs = {
 };
 
 
+export type MutationUpdateIncomeItemArgs = {
+  incomeItem: UpdateIncomeItem
+};
+
+
 export type MutationUpdateSavingCategoryArgs = {
   savingCategory: UpdateSavingCategory
 };
@@ -170,6 +210,8 @@ export type Query = {
   expenses: Array<Expense>,
   fixedCategories: Array<FixedCategory>,
   fixedCategory: FixedCategory,
+  incomeItem: IncomeItem,
+  incomeItems: Array<IncomeItem>,
   savingCategories: Array<SavingCategory>,
   savingCategory: SavingCategory,
   timePeriod: TimePeriod,
@@ -201,6 +243,18 @@ export type QueryFixedCategoriesArgs = {
 export type QueryFixedCategoryArgs = {
   userId: Scalars['String'],
   fixedCategoryId: Scalars['String']
+};
+
+
+export type QueryIncomeItemArgs = {
+  userId: Scalars['String'],
+  incomeItemId: Scalars['String']
+};
+
+
+export type QueryIncomeItemsArgs = {
+  userId: Scalars['String'],
+  timePeriodId: Scalars['String']
 };
 
 
@@ -273,6 +327,14 @@ export type UpdateFixedCategory = {
   name?: Maybe<Scalars['String']>,
   paid?: Maybe<Scalars['Boolean']>,
   note?: Maybe<Scalars['String']>,
+};
+
+export type UpdateIncomeItem = {
+  incomeItemId: Scalars['ID'],
+  userId: Scalars['String'],
+  amount?: Maybe<Scalars['Int']>,
+  recurring?: Maybe<Scalars['Boolean']>,
+  name?: Maybe<Scalars['String']>,
 };
 
 export type UpdateSavingCategory = {

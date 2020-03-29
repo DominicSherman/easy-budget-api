@@ -13,7 +13,7 @@ import * as resolverHelpers from '../../src/helpers/resolver-helpers';
 jest.mock('../../src/repositories/expense-repository');
 jest.mock('../../src/helpers/resolver-helpers');
 
-describe('variable category resolvers', () => {
+describe('expense resolvers', () => {
     const {
         getExpensesByVariableCategoryId,
         getExpensesByTimePeriodId,
