@@ -5,7 +5,7 @@ type IncomeItem {
     userId: String!
     amount: Int!
     recurring: Boolean!
-    name: String
+    name: String!
 }
 
 input CreateIncomeItem {
@@ -14,7 +14,7 @@ input CreateIncomeItem {
     userId: String!
     amount: Int!
     recurring: Boolean!
-    name: String
+    name: String!
 }
 
 input UpdateIncomeItem {

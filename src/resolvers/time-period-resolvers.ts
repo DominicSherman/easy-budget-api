@@ -5,6 +5,7 @@ import {
     insertVariableCategory
 } from '../repositories/variable-category-repository';
 import {getFixedCategoriesByTimePeriodId, insertFixedCategory} from '../repositories/fixed-category-repository';
+import {getIncomeItemsByTimePeriodId, insertIncomeItem} from '../repositories/income-item-repository';
 
 const uuid = require('uuid');
 
@@ -17,7 +18,8 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
 
     const timePeriods = await getTimePeriods(timePeriod.userId);
     let createVariableCategoryPromises = [],
-        createFixedCategoryPromises = [];
+        createFixedCategoryPromises = [],
+        createIncomeItemPromises = [];
 
     if (timePeriods.length) {
         const sortedTimePeriods = timePeriods.sort((a, b) => a.endDate > b.endDate ? -1 : 1);
@@ -27,14 +29,16 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
             throw new Error('Time periods cannot overlap');
         }
 
-        const previousVariableCategories = await getVariableCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
-        const previousFixedCategories = await getFixedCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId);
+        const [previousVariableCategories, previousFixedCategories, previousIncomeItems] = await Promise.all([
+            getVariableCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId),
+            getFixedCategoriesByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId),
+            getIncomeItemsByTimePeriodId(timePeriod.userId, mostRecentTimePeriod.timePeriodId)
+        ]);
 
         createVariableCategoryPromises = previousVariableCategories.map((variableCategory) =>
             insertVariableCategory({
                 ...variableCategory,
                 timePeriodId: timePeriod.timePeriodId,
-                userId: timePeriod.userId,
                 variableCategoryId: uuid.v4()
             })
         );
@@ -43,8 +47,14 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
                 ...fixedCategory,
                 fixedCategoryId: uuid.v4(),
                 paid: false,
-                timePeriodId: timePeriod.timePeriodId,
-                userId: timePeriod.userId
+                timePeriodId: timePeriod.timePeriodId
+            })
+        );
+        createIncomeItemPromises = previousIncomeItems.filter((incomeItem) => incomeItem.recurring).map((incomeItem) =>
+            insertIncomeItem({
+                ...incomeItem,
+                incomeItemId: uuid.v4(),
+                timePeriodId: timePeriod.timePeriodId
             })
         );
     }
@@ -52,6 +62,7 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
     await Promise.all([
         ...createVariableCategoryPromises,
         ...createFixedCategoryPromises,
+        ...createIncomeItemPromises,
         insertTimePeriod(timePeriod)
     ]);
 
