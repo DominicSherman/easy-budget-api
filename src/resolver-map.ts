@@ -25,20 +25,28 @@ import {
     getSavingCategoriesResolver,
     getSavingCategoryResolver, updateSavingCategoryResolver
 } from './resolvers/saving-category-resolvers';
+import {
+    createIncomeItemResolver, deleteIncomeItemResolver,
+    getIncomeItemResolver,
+    getIncomeItemsResolver, updateIncomeItemResolver
+} from './resolvers/income-item-resolvers';
 
 export default {
     Mutation: {
         createExpense: createExpenseResolver,
         createFixedCategory: createFixedCategoryResolver,
+        createIncomeItem: createIncomeItemResolver,
         createSavingCategory: createSavingCategoryResolver,
         createTimePeriod: createTimePeriodResolver,
         createVariableCategory: createVariableCategoryResolver,
         deleteExpense: deleteExpenseResolver,
         deleteFixedCategory: deleteFixedCategoryResolver,
+        deleteIncomeItem: deleteIncomeItemResolver,
         deleteSavingCategory: deleteSavingCategoryResolver,
         deleteVariableCategory: deleteVariableCategoryResolver,
         updateExpense: updateExpenseResolver,
         updateFixedCategory: updateFixedCategoryResolver,
+        updateIncomeItem: updateIncomeItemResolver,
         updateSavingCategory: updateSavingCategoryResolver,
         updateVariableCategory: updateVariableCategoryResolver
     },
@@ -47,6 +55,8 @@ export default {
         expenses: getExpensesResolver,
         fixedCategories: getFixedCategoriesResolver,
         fixedCategory: getFixedCategoryResolver,
+        incomeItem: getIncomeItemResolver,
+        incomeItems: getIncomeItemsResolver,
         savingCategories: getSavingCategoriesResolver,
         savingCategory: getSavingCategoryResolver,
         timePeriods: getTimePeriodsResolver,

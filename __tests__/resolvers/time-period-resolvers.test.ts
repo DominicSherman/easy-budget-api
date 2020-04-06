@@ -1,18 +1,26 @@
 import {chance} from '../chance';
-import {createRandomFixedCategory, createRandomTimePeriod, createRandomVariableCategory} from '../model-factory';
+import {
+    createRandomFixedCategory,
+    createRandomIncomeItem,
+    createRandomTimePeriod,
+    createRandomVariableCategory
+} from '../model-factory';
 import * as timePeriodRepository from '../../src/repositories/time-period-repository';
 import {createTimePeriodResolver, getTimePeriodsResolver} from '../../src/resolvers/time-period-resolvers';
 import * as variableCategoryRepository from '../../src/repositories/variable-category-repository';
 import * as fixedCategoryRepository from '../../src/repositories/fixed-category-repository';
+import * as incomeItemRepository from '../../src/repositories/income-item-repository';
 
 jest.mock('../../src/repositories/time-period-repository');
 jest.mock('../../src/repositories/variable-category-repository');
 jest.mock('../../src/repositories/fixed-category-repository');
+jest.mock('../../src/repositories/income-item-repository');
 
 describe('variable category resolvers', () => {
     const {getTimePeriods, insertTimePeriod, getTimePeriodsByDate} = timePeriodRepository as jest.Mocked<typeof timePeriodRepository>;
     const {getVariableCategoriesByTimePeriodId, insertVariableCategory} = variableCategoryRepository as jest.Mocked<typeof variableCategoryRepository>;
     const {getFixedCategoriesByTimePeriodId, insertFixedCategory} = fixedCategoryRepository as jest.Mocked<typeof fixedCategoryRepository>;
+    const {getIncomeItemsByTimePeriodId, insertIncomeItem} = incomeItemRepository as jest.Mocked<typeof incomeItemRepository>;
 
     let root,
         args;
@@ -35,7 +43,8 @@ describe('variable category resolvers', () => {
             expectedMostRecentTimePeriod,
             expectedTimePeriods,
             expectedPreviousVariableCategories,
-            expectedPreviousFixedCategories;
+            expectedPreviousFixedCategories,
+            expectedPreviousIncomeItems;
 
         beforeEach(() => {
             expectedCreateTimePeriod = createRandomTimePeriod();
@@ -54,10 +63,12 @@ describe('variable category resolvers', () => {
             ];
             expectedPreviousVariableCategories = chance.n(createRandomVariableCategory, chance.d6());
             expectedPreviousFixedCategories = chance.n(createRandomFixedCategory, chance.d6());
+            expectedPreviousIncomeItems = chance.n(createRandomIncomeItem, chance.d6());
 
             getTimePeriods.mockReturnValue(expectedTimePeriods);
             getVariableCategoriesByTimePeriodId.mockReturnValue(expectedPreviousVariableCategories);
             getFixedCategoriesByTimePeriodId.mockReturnValue(expectedPreviousFixedCategories);
+            getIncomeItemsByTimePeriodId.mockReturnValue(expectedPreviousIncomeItems);
         });
 
         it('should throw an error if begin date is greater than end date for new time period', async () => {
@@ -99,13 +110,12 @@ describe('variable category resolvers', () => {
                 expect(insertVariableCategory).toHaveBeenCalledWith({
                     ...variableCategory,
                     timePeriodId: expectedCreateTimePeriod.timePeriodId,
-                    userId: expectedCreateTimePeriod.userId,
                     variableCategoryId: expect.any(String)
                 });
             });
         });
 
-        it('should call insertFixedCategory for all of the previous variable categories', async () => {
+        it('should call insertFixedCategory for all of the previous fixed categories', async () => {
             await createTimePeriodResolver(root, args);
 
             expect(insertFixedCategory).toHaveBeenCalledTimes(expectedPreviousFixedCategories.length);
@@ -114,8 +124,22 @@ describe('variable category resolvers', () => {
                     ...variableCategory,
                     fixedCategoryId: expect.any(String),
                     paid: false,
-                    timePeriodId: expectedCreateTimePeriod.timePeriodId,
-                    userId: expectedCreateTimePeriod.userId
+                    timePeriodId: expectedCreateTimePeriod.timePeriodId
+                });
+            });
+        });
+
+        it('should call insertIncomeItem for all of the previous income items', async () => {
+            await createTimePeriodResolver(root, args);
+
+            const recurringIncomeItems = expectedPreviousIncomeItems.filter((incomeItem) => incomeItem.recurring);
+
+            expect(insertIncomeItem).toHaveBeenCalledTimes(recurringIncomeItems.length);
+            recurringIncomeItems.forEach((incomeItem) => {
+                expect(insertIncomeItem).toHaveBeenCalledWith({
+                    ...incomeItem,
+                    incomeItemId: expect.any(String),
+                    timePeriodId: expectedCreateTimePeriod.timePeriodId
                 });
             });
         });

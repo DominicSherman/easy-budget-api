@@ -1,4 +1,4 @@
-import {Expense, FixedCategory, SavingCategory, TimePeriod, VariableCategory} from '../src/generated/graphql';
+import {Expense, FixedCategory, SavingCategory, TimePeriod, VariableCategory, IncomeItem} from '../src/generated/graphql';
 
 import {chance} from './chance';
 
@@ -46,6 +46,17 @@ export const createRandomFixedCategory = (fixedCategory = {}): FixedCategory => 
     timePeriodId: chance.guid(),
     userId: chance.string(),
     ...fixedCategory
+});
+
+export const createRandomIncomeItem = (incomeItem = {}): IncomeItem => ({
+    __typename: 'IncomeItem',
+    amount: chance.natural(),
+    incomeItemId: chance.guid(),
+    name: chance.string(),
+    recurring: chance.bool(),
+    timePeriodId: chance.guid(),
+    userId: chance.string(),
+    ...incomeItem
 });
 
 export const createRandomTimePeriod = (timePeriod = {}): TimePeriod => {
