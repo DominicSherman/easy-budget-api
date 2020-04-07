@@ -21,29 +21,43 @@ import {
     updateFixedCategoryResolver
 } from './resolvers/fixed-category-resolvers';
 import {
-    createSavingCategoryResolver, deleteSavingCategoryResolver,
+    createSavingCategoryResolver,
+    deleteSavingCategoryResolver,
     getSavingCategoriesResolver,
-    getSavingCategoryResolver, updateSavingCategoryResolver
+    getSavingCategoryResolver,
+    updateSavingCategoryResolver
 } from './resolvers/saving-category-resolvers';
 import {
-    createIncomeItemResolver, deleteIncomeItemResolver,
+    createIncomeItemResolver,
+    deleteIncomeItemResolver,
     getIncomeItemResolver,
-    getIncomeItemsResolver, updateIncomeItemResolver
+    getIncomeItemsResolver,
+    updateIncomeItemResolver
 } from './resolvers/income-item-resolvers';
+import {
+    createDebtCategoryResolver,
+    deleteDebtCategoryResolver,
+    getDebtCategoriesResolver,
+    getDebtCategoryResolver,
+    updateDebtCategoryResolver
+} from './resolvers/debt-category-resolvers';
 
 export default {
     Mutation: {
+        createDebtCategory: createDebtCategoryResolver,
         createExpense: createExpenseResolver,
         createFixedCategory: createFixedCategoryResolver,
         createIncomeItem: createIncomeItemResolver,
         createSavingCategory: createSavingCategoryResolver,
         createTimePeriod: createTimePeriodResolver,
         createVariableCategory: createVariableCategoryResolver,
+        deleteDebtCategory: deleteDebtCategoryResolver,
         deleteExpense: deleteExpenseResolver,
         deleteFixedCategory: deleteFixedCategoryResolver,
         deleteIncomeItem: deleteIncomeItemResolver,
         deleteSavingCategory: deleteSavingCategoryResolver,
         deleteVariableCategory: deleteVariableCategoryResolver,
+        updateDebtCategory: updateDebtCategoryResolver,
         updateExpense: updateExpenseResolver,
         updateFixedCategory: updateFixedCategoryResolver,
         updateIncomeItem: updateIncomeItemResolver,
@@ -51,6 +65,8 @@ export default {
         updateVariableCategory: updateVariableCategoryResolver
     },
     Query: {
+        debtCategories: getDebtCategoriesResolver,
+        debtCategory: getDebtCategoryResolver,
         expense: getExpenseResolver,
         expenses: getExpensesResolver,
         fixedCategories: getFixedCategoriesResolver,

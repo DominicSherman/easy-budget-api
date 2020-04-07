@@ -16,6 +16,12 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type CreateDebtCategory = {
+  debtCategoryId: Scalars['String'],
+  userId: Scalars['String'],
+  name: Scalars['String'],
+};
+
 export type CreateExpense = {
   expenseId: Scalars['String'],
   userId: Scalars['String'],
@@ -42,7 +48,7 @@ export type CreateIncomeItem = {
   userId: Scalars['String'],
   amount: Scalars['Int'],
   recurring: Scalars['Boolean'],
-  name?: Maybe<Scalars['String']>,
+  name: Scalars['String'],
 };
 
 export type CreateSavingCategory = {
@@ -64,6 +70,14 @@ export type CreateVariableCategory = {
   userId: Scalars['String'],
   amount: Scalars['Int'],
   name: Scalars['String'],
+};
+
+export type DebtCategory = {
+   __typename?: 'DebtCategory',
+  debtCategoryId: Scalars['ID'],
+  userId: Scalars['String'],
+  name: Scalars['String'],
+  amount: Scalars['Int'],
 };
 
 export type Expense = {
@@ -96,27 +110,35 @@ export type IncomeItem = {
   userId: Scalars['String'],
   amount: Scalars['Int'],
   recurring: Scalars['Boolean'],
-  name?: Maybe<Scalars['String']>,
+  name: Scalars['String'],
 };
 
 export type Mutation = {
    __typename?: 'Mutation',
+  createDebtCategory: DebtCategory,
   createExpense: Expense,
   createFixedCategory: FixedCategory,
   createIncomeItem: IncomeItem,
   createSavingCategory: SavingCategory,
   createTimePeriod: TimePeriod,
   createVariableCategory: VariableCategory,
+  deleteDebtCategory: Scalars['String'],
   deleteExpense: Scalars['String'],
   deleteFixedCategory: Scalars['String'],
   deleteIncomeItem: Scalars['String'],
   deleteSavingCategory: Scalars['String'],
   deleteVariableCategory: Scalars['String'],
+  updateDebtCategory: DebtCategory,
   updateExpense: Expense,
   updateFixedCategory: FixedCategory,
   updateIncomeItem: IncomeItem,
   updateSavingCategory: SavingCategory,
   updateVariableCategory: VariableCategory,
+};
+
+
+export type MutationCreateDebtCategoryArgs = {
+  debtCategory: CreateDebtCategory
 };
 
 
@@ -150,6 +172,12 @@ export type MutationCreateVariableCategoryArgs = {
 };
 
 
+export type MutationDeleteDebtCategoryArgs = {
+  userId: Scalars['String'],
+  debtCategoryId: Scalars['String']
+};
+
+
 export type MutationDeleteExpenseArgs = {
   userId: Scalars['String'],
   expenseId: Scalars['String']
@@ -180,6 +208,11 @@ export type MutationDeleteVariableCategoryArgs = {
 };
 
 
+export type MutationUpdateDebtCategoryArgs = {
+  debtCategory: UpdateDebtCategory
+};
+
+
 export type MutationUpdateExpenseArgs = {
   expense: UpdateExpense
 };
@@ -206,6 +239,8 @@ export type MutationUpdateVariableCategoryArgs = {
 
 export type Query = {
    __typename?: 'Query',
+  debtCategories: Array<DebtCategory>,
+  debtCategory: DebtCategory,
   expense: Expense,
   expenses: Array<Expense>,
   fixedCategories: Array<FixedCategory>,
@@ -218,6 +253,17 @@ export type Query = {
   timePeriods: Array<TimePeriod>,
   variableCategories: Array<VariableCategory>,
   variableCategory: VariableCategory,
+};
+
+
+export type QueryDebtCategoriesArgs = {
+  userId: Scalars['String']
+};
+
+
+export type QueryDebtCategoryArgs = {
+  userId: Scalars['String'],
+  debtCategoryId: Scalars['String']
 };
 
 
@@ -254,7 +300,7 @@ export type QueryIncomeItemArgs = {
 
 export type QueryIncomeItemsArgs = {
   userId: Scalars['String'],
-  timePeriodId: Scalars['String']
+  timePeriodId?: Maybe<Scalars['String']>
 };
 
 
@@ -309,6 +355,13 @@ export type TimePeriod = {
   fixedCategories: Array<FixedCategory>,
   variableCategories: Array<VariableCategory>,
   expenses: Array<Expense>,
+};
+
+export type UpdateDebtCategory = {
+  debtCategoryId: Scalars['String'],
+  userId: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
+  amount?: Maybe<Scalars['Int']>,
 };
 
 export type UpdateExpense = {
