@@ -1,4 +1,12 @@
-import {Expense, FixedCategory, SavingCategory, TimePeriod, VariableCategory, IncomeItem} from '../src/generated/graphql';
+import {
+    Expense,
+    FixedCategory,
+    SavingCategory,
+    TimePeriod,
+    VariableCategory,
+    IncomeItem,
+    DebtCategory
+} from '../src/generated/graphql';
 
 import {chance} from './chance';
 
@@ -23,6 +31,15 @@ export const createRandomSavingCategory = (savingCategory = {}): SavingCategory 
     savingCategoryId: chance.guid(),
     userId: chance.string(),
     ...savingCategory
+});
+
+export const createRandomDebtCategory = (debtCategory = {}): DebtCategory => ({
+    __typename: 'DebtCategory',
+    amount: chance.natural(),
+    debtCategoryId: chance.guid(),
+    name: chance.string(),
+    userId: chance.string(),
+    ...debtCategory
 });
 
 export const createRandomVariableCategory = (variableCategory = {}): VariableCategory => ({
