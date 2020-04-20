@@ -15,4 +15,11 @@ input CreateTimePeriod {
     endDate: String!
     userId: String!
 }
+
+input UpdateTimePeriod {
+    timePeriodId: String!
+    beginDate: String
+    endDate: String
+    userId: String!
+}
 `;

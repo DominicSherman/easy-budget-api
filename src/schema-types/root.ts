@@ -29,12 +29,14 @@ type Mutation {
     deleteFixedCategory(userId: String!, fixedCategoryId: String!): String!
     deleteIncomeItem(userId: String!, incomeItemId: String!): String!
     deleteSavingCategory(userId: String!, savingCategoryId: String!): String!
+    deleteTimePeriod(userId: String!, timePeriodId: String!): String!
     deleteVariableCategory(userId: String!, variableCategoryId: String!): String!
     updateDebtCategory(debtCategory: UpdateDebtCategory!): DebtCategory!
     updateExpense(expense: UpdateExpense!): Expense!
     updateFixedCategory(fixedCategory: UpdateFixedCategory!): FixedCategory!
     updateIncomeItem(incomeItem: UpdateIncomeItem!): IncomeItem!
     updateSavingCategory(savingCategory: UpdateSavingCategory!): SavingCategory!
+    updateTimePeriod(timePeriod: UpdateTimePeriod!): TimePeriod!
     updateVariableCategory(variableCategory: UpdateVariableCategory!): VariableCategory!
 }
 `;

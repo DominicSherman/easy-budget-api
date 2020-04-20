@@ -1,6 +1,7 @@
 import * as firestoreAdapter from '../../src/adapters/firestore-adapter';
 import * as repositoryHelpers from '../../src/helpers/repository-helpers';
 import {
+    deleteTimePeriod, getTimePeriodByTimePeriodId,
     getTimePeriods,
     getTimePeriodsByDate,
     insertTimePeriod
@@ -14,7 +15,7 @@ jest.mock('../../src/adapters/firestore-adapter');
 jest.mock('../../src/helpers/repository-helpers');
 
 describe('time period repository', () => {
-    const {getFirestoreData, setFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
+    const {getFirestoreData, setFirestoreData, deleteFirestoreData} = firestoreAdapter as jest.Mocked<typeof firestoreAdapter>;
     const {getDataFromQuerySnapshot} = repositoryHelpers as jest.Mocked<typeof repositoryHelpers>;
 
     let expectedUserId;
@@ -53,9 +54,37 @@ describe('time period repository', () => {
         });
     });
 
+    describe('deleteTimePeriod', () => {
+        let expectedResponse,
+            expectedUserId,
+            expectedTimePeriodId;
+
+        beforeEach(() => {
+            expectedResponse = {
+                [chance.string()]: chance.string()
+            };
+            expectedUserId = chance.string();
+            expectedTimePeriodId = chance.string();
+
+            deleteFirestoreData.mockReturnValue(expectedResponse);
+        });
+
+        it('should call deleteFirestoreData', () => {
+            deleteTimePeriod(expectedUserId, expectedTimePeriodId);
+
+            expect(deleteFirestoreData).toHaveBeenCalledTimes(1);
+            expect(deleteFirestoreData).toHaveBeenCalledWith(
+                expectedUserId,
+                'timePeriods',
+                expectedTimePeriodId
+            );
+        });
+    });
+
     describe('getTimePeriods', () => {
         let expectedQuerySnapshot,
-            expectedResponse;
+            expectedResponse,
+            expectedWhere;
 
         beforeEach(() => {
             expectedQuerySnapshot = {
@@ -64,16 +93,19 @@ describe('time period repository', () => {
             expectedResponse = {
                 [chance.string()]: chance.string()
             };
+            expectedWhere = {
+                [chance.string()]: chance.string()
+            };
 
             getFirestoreData.mockReturnValue(expectedQuerySnapshot);
             getDataFromQuerySnapshot.mockReturnValue(expectedResponse);
         });
 
         it('should call getFirestoreData', async () => {
-            await getTimePeriods(expectedUserId);
+            await getTimePeriods(expectedUserId, expectedWhere);
 
             expect(getFirestoreData).toHaveBeenCalledTimes(1);
-            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'timePeriods');
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'timePeriods', expectedWhere);
         });
 
         it('should call getDataFromQuerySnapshot', async () => {
@@ -87,6 +119,39 @@ describe('time period repository', () => {
             const actualResponse = await getTimePeriods(expectedUserId);
 
             expect(actualResponse).toEqual(expectedResponse);
+        });
+    });
+
+    describe('getTimePeriodbyTimePeriodId', () => {
+        let expectedUserId,
+            expectedTimePeriodId,
+            expectedQuerySnapshot,
+            expectedTimePeriods;
+
+        beforeEach(() => {
+            expectedUserId = chance.string();
+            expectedTimePeriodId = chance.guid();
+            expectedQuerySnapshot = {
+                [chance.string()]: chance.string()
+            };
+            expectedTimePeriods = chance.n(createRandomTimePeriod, chance.d6());
+
+            getFirestoreData.mockReturnValue(expectedQuerySnapshot);
+            getDataFromQuerySnapshot.mockReturnValue(expectedTimePeriods);
+        });
+
+        it('should call getTimePeriods with timePeriodId', async () => {
+            const actualTimePeriod = await getTimePeriodByTimePeriodId(expectedUserId, expectedTimePeriodId);
+
+            expect(getFirestoreData).toHaveBeenCalledTimes(1);
+            expect(getFirestoreData).toHaveBeenCalledWith(expectedUserId, 'timePeriods', {
+                field: 'timePeriodId',
+                operator: '==',
+                value: expectedTimePeriodId
+            });
+            expect(getDataFromQuerySnapshot).toHaveBeenCalledTimes(1);
+            expect(getDataFromQuerySnapshot).toHaveBeenCalledWith(expectedQuerySnapshot);
+            expect(actualTimePeriod).toEqual(expectedTimePeriods[0]);
         });
     });
 

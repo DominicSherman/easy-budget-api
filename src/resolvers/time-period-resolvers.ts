@@ -1,5 +1,17 @@
-import {getTimePeriods, getTimePeriodsByDate, insertTimePeriod} from '../repositories/time-period-repository';
-import {CreateTimePeriod, MutationCreateTimePeriodArgs, QueryTimePeriodsArgs, TimePeriod} from '../generated/graphql';
+import {
+    deleteTimePeriod,
+    getTimePeriodByTimePeriodId,
+    getTimePeriods,
+    getTimePeriodsByDate,
+    insertTimePeriod
+} from '../repositories/time-period-repository';
+import {
+    CreateTimePeriod,
+    MutationCreateTimePeriodArgs, MutationDeleteTimePeriodArgs,
+    MutationUpdateTimePeriodArgs,
+    QueryTimePeriodsArgs,
+    TimePeriod
+} from '../generated/graphql';
 import {
     getVariableCategoriesByTimePeriodId,
     insertVariableCategory
@@ -25,8 +37,13 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
         const sortedTimePeriods = timePeriods.sort((a, b) => a.endDate > b.endDate ? -1 : 1);
         const mostRecentTimePeriod = sortedTimePeriods[0];
 
-        if (mostRecentTimePeriod.endDate > timePeriod.beginDate) {
-            throw new Error('Time periods cannot overlap');
+        for (const t of timePeriods) {
+            if (
+                timePeriod.beginDate >= t.beginDate && timePeriod.beginDate <= t.endDate ||
+                timePeriod.endDate >= t.beginDate && timePeriod.endDate <= t.endDate
+            ) {
+                throw new Error('Time periods cannot overlap');
+            }
         }
 
         const [previousVariableCategories, previousFixedCategories, previousIncomeItems] = await Promise.all([
@@ -67,6 +84,46 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
     ]);
 
     return timePeriod;
+};
+
+export const deleteTimePeriodResolver = async (root: any, args: MutationDeleteTimePeriodArgs): Promise<string> => {
+    const {userId, timePeriodId} = args;
+
+    await deleteTimePeriod(userId, timePeriodId);
+
+    return timePeriodId;
+};
+
+export const updateTimePeriodResolver = async (root: any, args: MutationUpdateTimePeriodArgs): Promise<TimePeriod> => {
+    const {timePeriod} = args;
+    const timePeriods = await getTimePeriods(timePeriod.userId);
+    const currentTimePeriods = timePeriods.filter((t) => t.timePeriodId !== timePeriod.timePeriodId);
+    const currentTimePeriod = timePeriods.find((t) => t.timePeriodId === timePeriod.timePeriodId);
+
+    if (!currentTimePeriod) {
+        throw new Error('Invalid time period ID');
+    }
+
+    for (const t of currentTimePeriods) {
+        if (
+            timePeriod.beginDate && timePeriod.beginDate >= t.beginDate && timePeriod.beginDate <= t.endDate ||
+            timePeriod.endDate && timePeriod.endDate >= t.beginDate && timePeriod.endDate <= t.endDate
+        ) {
+            throw new Error('Time periods cannot overlap');
+        }
+    }
+
+    if (
+        timePeriod.beginDate && !timePeriod.endDate && timePeriod.beginDate >= currentTimePeriod.endDate ||
+        timePeriod.endDate && !timePeriod.beginDate && currentTimePeriod.beginDate >= timePeriod.endDate ||
+        timePeriod.beginDate && timePeriod.endDate && timePeriod.beginDate >= timePeriod.endDate
+    ) {
+        throw new Error('End date must be after begin date');
+    }
+
+    await insertTimePeriod(timePeriod);
+
+    return getTimePeriodByTimePeriodId(timePeriod.userId, timePeriod.timePeriodId);
 };
 
 export const getTimePeriodsResolver = (root: any, args: QueryTimePeriodsArgs): Promise<TimePeriod[]> => {

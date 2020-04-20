@@ -127,12 +127,14 @@ export type Mutation = {
   deleteFixedCategory: Scalars['String'],
   deleteIncomeItem: Scalars['String'],
   deleteSavingCategory: Scalars['String'],
+  deleteTimePeriod: Scalars['String'],
   deleteVariableCategory: Scalars['String'],
   updateDebtCategory: DebtCategory,
   updateExpense: Expense,
   updateFixedCategory: FixedCategory,
   updateIncomeItem: IncomeItem,
   updateSavingCategory: SavingCategory,
+  updateTimePeriod: TimePeriod,
   updateVariableCategory: VariableCategory,
 };
 
@@ -202,6 +204,12 @@ export type MutationDeleteSavingCategoryArgs = {
 };
 
 
+export type MutationDeleteTimePeriodArgs = {
+  userId: Scalars['String'],
+  timePeriodId: Scalars['String']
+};
+
+
 export type MutationDeleteVariableCategoryArgs = {
   userId: Scalars['String'],
   variableCategoryId: Scalars['String']
@@ -230,6 +238,11 @@ export type MutationUpdateIncomeItemArgs = {
 
 export type MutationUpdateSavingCategoryArgs = {
   savingCategory: UpdateSavingCategory
+};
+
+
+export type MutationUpdateTimePeriodArgs = {
+  timePeriod: UpdateTimePeriod
 };
 
 
@@ -395,6 +408,13 @@ export type UpdateSavingCategory = {
   userId: Scalars['String'],
   name?: Maybe<Scalars['String']>,
   amount?: Maybe<Scalars['Int']>,
+};
+
+export type UpdateTimePeriod = {
+  timePeriodId: Scalars['String'],
+  beginDate?: Maybe<Scalars['String']>,
+  endDate?: Maybe<Scalars['String']>,
+  userId: Scalars['String'],
 };
 
 export type UpdateVariableCategory = {
