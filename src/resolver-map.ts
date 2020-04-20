@@ -12,7 +12,12 @@ import {
     getExpensesResolver,
     updateExpenseResolver
 } from './resolvers/expense-resolvers';
-import {createTimePeriodResolver, getTimePeriodsResolver} from './resolvers/time-period-resolvers';
+import {
+    createTimePeriodResolver,
+    deleteTimePeriodResolver,
+    getTimePeriodsResolver,
+    updateTimePeriodResolver
+} from './resolvers/time-period-resolvers';
 import {
     createFixedCategoryResolver,
     deleteFixedCategoryResolver,
@@ -56,12 +61,14 @@ export default {
         deleteFixedCategory: deleteFixedCategoryResolver,
         deleteIncomeItem: deleteIncomeItemResolver,
         deleteSavingCategory: deleteSavingCategoryResolver,
+        deleteTimePeriod: deleteTimePeriodResolver,
         deleteVariableCategory: deleteVariableCategoryResolver,
         updateDebtCategory: updateDebtCategoryResolver,
         updateExpense: updateExpenseResolver,
         updateFixedCategory: updateFixedCategoryResolver,
         updateIncomeItem: updateIncomeItemResolver,
         updateSavingCategory: updateSavingCategoryResolver,
+        updateTimePeriod: updateTimePeriodResolver,
         updateVariableCategory: updateVariableCategoryResolver
     },
     Query: {
