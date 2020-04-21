@@ -21,6 +21,18 @@ import {getIncomeItemsByTimePeriodId, insertIncomeItem} from '../repositories/in
 
 const uuid = require('uuid');
 
+const overlapsAtBeginning = (t1, t2): boolean => t1.beginDate > t2.beginDate && t1.beginDate < t2.endDate;
+
+const overlapsAtEnd = (t1, t2): boolean => t1.endDate > t2.beginDate && t1.endDate < t2.endDate;
+
+const containsOtherTimePeriod = (t1, t2): boolean => t1.beginDate < t2.beginDate && t1.endDate > t2.endDate;
+
+const overlaps = (t1, t2): boolean =>
+    overlapsAtBeginning(t1, t2) ||
+    overlapsAtEnd(t1, t2) ||
+    containsOtherTimePeriod(t1, t2) ||
+    containsOtherTimePeriod(t2, t1);
+
 export const createTimePeriodResolver = async (root: any, args: MutationCreateTimePeriodArgs): Promise<CreateTimePeriod> => {
     const {timePeriod} = args;
 
@@ -38,10 +50,7 @@ export const createTimePeriodResolver = async (root: any, args: MutationCreateTi
         const mostRecentTimePeriod = sortedTimePeriods[0];
 
         for (const t of timePeriods) {
-            if (
-                timePeriod.beginDate >= t.beginDate && timePeriod.beginDate <= t.endDate ||
-                timePeriod.endDate >= t.beginDate && timePeriod.endDate <= t.endDate
-            ) {
+            if (overlaps(timePeriod, t)) {
                 throw new Error('Time periods cannot overlap');
             }
         }
@@ -104,21 +113,14 @@ export const updateTimePeriodResolver = async (root: any, args: MutationUpdateTi
         throw new Error('Invalid time period ID');
     }
 
-    for (const t of currentTimePeriods) {
-        if (
-            timePeriod.beginDate && timePeriod.beginDate >= t.beginDate && timePeriod.beginDate <= t.endDate ||
-            timePeriod.endDate && timePeriod.endDate >= t.beginDate && timePeriod.endDate <= t.endDate
-        ) {
-            throw new Error('Time periods cannot overlap');
-        }
+    if (timePeriod.beginDate >= timePeriod.endDate) {
+        throw new Error('End date must be after begin date');
     }
 
-    if (
-        timePeriod.beginDate && !timePeriod.endDate && timePeriod.beginDate >= currentTimePeriod.endDate ||
-        timePeriod.endDate && !timePeriod.beginDate && currentTimePeriod.beginDate >= timePeriod.endDate ||
-        timePeriod.beginDate && timePeriod.endDate && timePeriod.beginDate >= timePeriod.endDate
-    ) {
-        throw new Error('End date must be after begin date');
+    for (const t of currentTimePeriods) {
+        if (overlaps(timePeriod, t)) {
+            throw new Error('Time periods cannot overlap');
+        }
     }
 
     await insertTimePeriod(timePeriod);
