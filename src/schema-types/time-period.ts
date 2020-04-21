@@ -18,8 +18,8 @@ input CreateTimePeriod {
 
 input UpdateTimePeriod {
     timePeriodId: String!
-    beginDate: String
-    endDate: String
+    beginDate: String!
+    endDate: String!
     userId: String!
 }
 `;

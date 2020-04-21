@@ -412,8 +412,8 @@ export type UpdateSavingCategory = {
 
 export type UpdateTimePeriod = {
   timePeriodId: Scalars['String'],
-  beginDate?: Maybe<Scalars['String']>,
-  endDate?: Maybe<Scalars['String']>,
+  beginDate: Scalars['String'],
+  endDate: Scalars['String'],
   userId: Scalars['String'],
 };
 

@@ -83,9 +83,13 @@ describe('variable category resolvers', () => {
         });
 
         it('should throw an error if begin date is greater than end date for new time period', async () => {
-            expectedCreateTimePeriod.endDate = chance.natural();
-            expectedCreateTimePeriod.beginDate = expectedCreateTimePeriod.endDate + 1;
-            args.timePeriod = expectedCreateTimePeriod;
+            const expectedBeginDate = chance.natural();
+
+            args.timePeriod = {
+                ...args.timePeriod,
+                beginDate: expectedBeginDate,
+                endDate: expectedBeginDate - 1
+            };
 
             await expect(createTimePeriodResolver(root, args)).rejects.toThrow('End date must be after begin date');
         });
@@ -123,6 +127,30 @@ describe('variable category resolvers', () => {
 
             expectedCreateTimePeriod = {
                 beginDate: conflictingTimePeriod.endDate - 8,
+                endDate: conflictingTimePeriod.endDate - 1
+            };
+            args.timePeriod = expectedCreateTimePeriod;
+
+            await expect(createTimePeriodResolver(root, args)).rejects.toThrow('Time periods cannot overlap');
+        });
+
+        it('should throw an error if it overlaps one', async () => {
+            const conflictingTimePeriod = chance.pickone(expectedTimePeriods);
+
+            expectedCreateTimePeriod = {
+                beginDate: conflictingTimePeriod.beginDate - 1,
+                endDate: conflictingTimePeriod.endDate + 1
+            };
+            args.timePeriod = expectedCreateTimePeriod;
+
+            await expect(createTimePeriodResolver(root, args)).rejects.toThrow('Time periods cannot overlap');
+        });
+
+        it('should throw an error if it is overlapped by one', async () => {
+            const conflictingTimePeriod = chance.pickone(expectedTimePeriods);
+
+            expectedCreateTimePeriod = {
+                beginDate: conflictingTimePeriod.beginDate + 1,
                 endDate: conflictingTimePeriod.endDate - 1
             };
             args.timePeriod = expectedCreateTimePeriod;
@@ -227,14 +255,18 @@ describe('variable category resolvers', () => {
                 [chance.string()]: chance.string()
             };
             expectedTimePeriods = chance.n(() => {
-                const endDate = args.timePeriod.endDate - chance.natural();
+                const endDate = args.timePeriod.beginDate - chance.natural();
 
                 return createRandomTimePeriod({
-                    beginDate: endDate - 1,
+                    beginDate: endDate - 10,
                     endDate
                 });
             }, chance.d6());
-            expectedCurrentTimePeriod = createRandomTimePeriod({timePeriodId: args.timePeriod.timePeriodId});
+            expectedCurrentTimePeriod = createRandomTimePeriod({
+                beginDate: args.timePeriod.beginDate - 10,
+                endDate: args.timePeriod.beginDate - 2,
+                timePeriodId: args.timePeriod.timePeriodId
+            });
 
             getTimePeriodByTimePeriodId.mockResolvedValue(expectedResponse);
             getTimePeriods.mockResolvedValue([
@@ -264,6 +296,7 @@ describe('variable category resolvers', () => {
                 const conflictingTimePeriod = chance.pickone(expectedTimePeriods);
 
                 args.timePeriod.beginDate = conflictingTimePeriod.beginDate + 1;
+                args.timePeriod.endDate = conflictingTimePeriod.beginDate + 2;
 
                 await expect(updateTimePeriodResolver(root, args)).rejects.toThrow('Time periods cannot overlap');
             });
@@ -278,26 +311,6 @@ describe('variable category resolvers', () => {
                 };
 
                 await expect(updateTimePeriodResolver(root, args)).rejects.toThrow('Time periods cannot overlap');
-            });
-
-            it('should throw an error if there is only a begin date and it is after the current end date', async () => {
-                args.timePeriod = {
-                    ...args.timePeriod,
-                    beginDate: expectedCurrentTimePeriod.endDate + 1,
-                    endDate: null
-                };
-
-                await expect(updateTimePeriodResolver(root, args)).rejects.toThrow('End date must be after begin date');
-            });
-
-            it('should throw an error if there is only an end date and it is before the current beginDate date', async () => {
-                args.timePeriod = {
-                    ...args.timePeriod,
-                    beginDate: null,
-                    endDate: expectedCurrentTimePeriod.beginDate - 1
-                };
-
-                await expect(updateTimePeriodResolver(root, args)).rejects.toThrow('End date must be after begin date');
             });
 
             it('should throw an error if there is both dates and the end date is before the begin date', async () => {
