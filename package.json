@@ -19,7 +19,7 @@
     "node": "10"
   },
   "dependencies": {
-    "apollo-server-express": "^2.9.5",
+    "apollo-server-express": "^2.14.2",
     "config": "^3.2.4",
     "esm": "^3.2.25",
     "express": "^4.17.1",
